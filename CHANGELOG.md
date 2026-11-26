@@ -1,5 +1,9 @@
 # Nouveautés de CodeQuest
 
+## 1.5.1 — 26 novembre 2026
+- iPhone : flou de la barre du haut et de la barre d'onglets du bas nettement réduit.
+- Survol : halo de verre fixe autour de l'élément pointé, à la place du reflet qui suivait le curseur.
+
 ## 1.5.0 — 26 novembre 2026
 - **Liste des langages verticale**, à gauche, rangée en catégories (Pour débuter, Web, Données, Logiciel et systèmes, Mobile, Outils) qu'on peut **déplier / replier**. Sur téléphone, la liste se déroule depuis le bouton « Changer de langage ».
 - **Système de déblocage** : Python, Algorithmique et HTML sont ouverts dès le départ. Les autres langages se débloquent en terminant des leçons (ex. CSS ← 2 leçons de HTML, JavaScript ← 2 leçons de CSS, SQL ← 3 leçons de Python, Bash ← niveau 3). Un langage verrouillé montre ce qu'il faut faire et un bouton pour y aller. Une notification annonce chaque nouveau langage débloqué. Les langages déjà commencés restent ouverts.
