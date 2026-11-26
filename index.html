@@ -43,6 +43,7 @@ svg{flex:none}
 .seg button[aria-pressed=true]{background:var(--surf);color:var(--ink);box-shadow:var(--sh)}
 .thm{width:40px;height:40px;border-radius:99px;border:1px solid var(--line);background:var(--surf);display:grid;place-items:center;color:var(--ink)}.thm svg{width:18px;height:18px}.thm:hover{border-color:color-mix(in srgb,var(--ink) 25%,var(--line))}
 .pset{margin-top:22px}.pset h3{margin-bottom:10px}.pset .seg{display:inline-flex}.pset .seg button{padding:0 12px}
+.news{margin-top:22px;background:color-mix(in srgb,var(--ac) 10%,var(--surf));border-radius:12px;padding:14px 16px}.news h3{margin-bottom:8px}.news ul{margin:0;padding-left:18px;font-size:13.5px;display:grid;gap:4px}
 .ver{color:var(--mute);font-size:12.5px;margin-top:14px}
 .me{display:flex;align-items:center;gap:8px;min-height:40px;padding:0 6px 0 12px;border:1px solid var(--line);border-radius:99px;background:var(--surf);font-weight:600;font-size:14px;font-variant-numeric:tabular-nums}
 .me .fire{color:#f97316;display:flex;align-items:center;gap:4px}.me .fire svg{width:16px;height:16px}
@@ -314,7 +315,9 @@ const A=[
 // ================= ÉTAT =================
 let installOk=false;
 const KEY='codequest-v1';
-const VERSION='1.2.0';
+const VERSION='1.2.1';
+const NEWS={fr:['Nouvel encadré « Quoi de neuf » dans le profil, mis à jour à chaque version.','L\'appli PC se met à jour toute seule à chaque lancement.'],
+ en:['New “What\'s new” box in your profile, updated with every version.','The PC app now updates itself every time it starts.']};
 const fresh=()=>({theme:'auto',seenV:'',xp:0,done:{},lessons:0,perfect:0,tried:{},streak:0,last:'',ach:{},night:false,early:false,cur:'py',ui:'fr',view:'path',ch:{},drafts:{},rev:{},revOk:0,asked:0,eng:{}});
 let S=fresh();
 const fixView=()=>{if(!['path','lab','review'].includes(S.view))S.view='path'};
@@ -410,6 +413,7 @@ function renderProfile(){
  <div class="achs">${A.map(x=>`<button class="ach ${S.ach[x.id]?'on':''}" data-a="${x.id}" aria-label="${esc(L(x.n))}">${icon(x.i)}</button>`).join('')}</div>
  <div class="achinfo" id="achinfo">${achText(achSel)}</div>
  <div class="pset"><h3>${tt.theme}</h3><div class="seg" role="group" aria-label="${tt.theme}">${[['auto',tt.thAuto],['light',tt.thLight],['dark',tt.thDark]].map(([k,l])=>`<button data-th="${k}" aria-pressed="${S.theme===k}">${l}</button>`).join('')}</div></div>
+ <div class="news"><h3>${S.ui==='fr'?'Quoi de neuf':'What\'s new'} <span>v${VERSION}</span></h3><ul>${(NEWS[S.ui]||NEWS.fr).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>
  <div class="pfoot"><button id="install" ${installOk?'':'hidden'}>${tt.install}</button><button class="reset" id="reset">${tt.reset}</button><div class="ver">CodeQuest ${VERSION}</div></div>`;
 }
 function openProf(on){$('prof').classList.toggle('on',on);$('scrim').classList.toggle('on',on);$('prof').setAttribute('aria-hidden',!on);if(on)setTimeout(()=>$('profX')?.focus(),50)}
@@ -624,7 +628,7 @@ function applyTheme(){const r=document.documentElement;if(S.theme==='auto')delet
 function setTheme(v){S.theme=v;save();applyTheme();renderSide();renderProfile()}
 matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>{if(S.theme==='auto'){applyTheme();renderSide()}});
 fixView();applyTheme();render();
-if(S.seenV&&S.seenV!==VERSION){setTimeout(()=>{$('tt').textContent=(S.ui==='fr'?'Mise à jour : CodeQuest ':'Updated: CodeQuest ')+VERSION;$('td').textContent=S.ui==='fr'?'Les nouveautés sont dans le CHANGELOG sur GitHub.':'See the CHANGELOG on GitHub for what\'s new.';$('toast').classList.add('on');setTimeout(()=>$('toast').classList.remove('on'),5000)},800)}
+if(S.seenV&&S.seenV!==VERSION){setTimeout(()=>{$('tt').textContent=(S.ui==='fr'?'Mise à jour : CodeQuest ':'Updated: CodeQuest ')+VERSION;$('td').textContent=S.ui==='fr'?'Ouvre ton profil (🔥) pour voir les nouveautés.':'Open your profile (🔥) to see what\'s new.';$('toast').classList.add('on');setTimeout(()=>$('toast').classList.remove('on'),5000)},800)}
 if(S.seenV!==VERSION){S.seenV=VERSION;save()}
 // ================= APPLI INSTALLABLE (PWA) =================
 let installEvt=null;

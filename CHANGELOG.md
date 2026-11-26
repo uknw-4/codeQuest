@@ -1,5 +1,9 @@
 # Nouveautés de CodeQuest
 
+## 1.2.1 — 26 novembre 2026
+- Nouvel encadré **« Quoi de neuf »** dans le profil.
+- Première mise à jour livrée automatiquement à l'appli PC, sans retélécharger le `.exe`.
+
 ## 1.2.0 — 26 novembre 2026
 - **Mises à jour automatiques de l'appli PC** : à chaque démarrage (avec internet), `CodeQuest.exe` récupère la dernière version sur GitHub. Plus besoin de retélécharger le `.exe` pour avoir les nouveautés.
 - Sans internet, l'appli démarre avec la dernière version déjà récupérée.
