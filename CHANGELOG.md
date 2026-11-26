@@ -1,5 +1,12 @@
 # Nouveautés de CodeQuest
 
+## 1.3.0 — 26 novembre 2026
+- **Parcours Front-end** (8 leçons) : rôle du front, DOM, événements, formulaires, responsive, accessibilité, fetch, frameworks.
+- **Parcours Back-end** (8 leçons) : client/serveur, HTTP, API REST et JSON, Node.js/Express, bases de données, sécurité, secrets et mise en ligne, Python avec Flask.
+- **18 nouveaux défis dans l'Atelier** : formulaire de contact, image accessible, carte produit, flexbox, grille, prix, e-mail, slug, codes HTTP, mini routeur, pagination, validation, paramètres d'URL, limite de requêtes, mot de passe solide, analyse de logs, et 2 requêtes SQL.
+- Filtres **Front-end** et **Back-end** dans l'Atelier.
+- Onglets, sélecteurs et étiquettes plus fins (bordures et reflets plus discrets).
+
 ## 1.2.1 — 26 novembre 2026
 - Nouvel encadré **« Quoi de neuf »** dans le profil.
 - Première mise à jour livrée automatiquement à l'appli PC, sans retélécharger le `.exe`.

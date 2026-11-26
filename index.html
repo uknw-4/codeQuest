@@ -17,7 +17,7 @@
 --bg:light-dark(#f7f7f9,#0b0b0f);--surf:light-dark(#ffffff,#141419);--surf2:light-dark(#f0f0f3,#1c1c23);
 --line:light-dark(#e5e5ea,#26262f);--ink:light-dark(#121216,#f1f1f4);--mute:light-dark(#6a6a76,#8f8f9c);
 --ac:#8b5cf6;--xp:#8b5cf6;--gold:#f5b83d;--ok:#22a06b;--bad:#e5484d;--lc:#3776ab;--lt:#fff;
---r:14px;--sh:light-dark(0 1px 2px rgba(16,16,24,.06),0 1px 0 rgba(255,255,255,.02))}
+--hair:light-dark(rgba(16,16,28,.09),rgba(255,255,255,.075));--hi:light-dark(rgba(255,255,255,.95),rgba(255,255,255,.06));--r:14px;--sh:light-dark(0 1px 2px rgba(16,16,24,.06),0 1px 0 rgba(255,255,255,.02))}
 :root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
 *{box-sizing:border-box;min-width:0}
 body{margin:0;background:var(--bg);color:var(--ink);font:15.5px/1.55 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
@@ -31,16 +31,16 @@ svg{flex:none}
 .tin{max-width:1080px;margin:0 auto;padding:0 20px;height:64px;display:flex;align-items:center;gap:16px}
 .logo{display:flex;align-items:center;gap:10px;border:0;background:none;padding:0;font-weight:700;font-size:17px;letter-spacing:-.02em}
 .logo i{width:30px;height:30px;border-radius:9px;background:var(--ac);color:#fff;display:grid;place-items:center;font:700 12px "JetBrains Mono",monospace;font-style:normal}
-.tabsN{display:flex;gap:4px;margin:0 auto;background:var(--surf2);border-radius:12px;padding:4px}
-.nav{display:flex;align-items:center;gap:8px;min-height:38px;padding:0 14px;border:0;border-radius:9px;background:none;color:var(--mute);font-weight:550;font-size:14.5px}
+.tabsN{display:flex;gap:2px;margin:0 auto;background:var(--surf2);border:1px solid var(--hair);border-radius:13px;padding:3px}
+.nav{display:flex;align-items:center;gap:8px;min-height:36px;padding:0 14px;border:1px solid transparent;border-radius:10px;transition:background .15s,color .15s,border-color .15s;background:none;color:var(--mute);font-weight:550;font-size:14.5px}
 .nav svg{width:18px;height:18px}
 .nav:hover{color:var(--ink)}
-.nav[aria-current=true]{background:var(--surf);color:var(--ink);box-shadow:var(--sh)}
+.nav[aria-current=true]{background:var(--surf);color:var(--ink);border-color:var(--hair);box-shadow:0 1px 2px rgba(0,0,0,.1),inset 0 1px 0 var(--hi)}
 .pill{font:600 11.5px Inter,sans-serif;background:var(--ac);color:#fff;border-radius:99px;padding:1px 7px;font-style:normal}
 .tr{display:flex;align-items:center;gap:10px}
-.seg{display:flex;background:var(--surf2);border-radius:10px;padding:3px}
-.seg button{min-height:32px;min-width:38px;border:0;border-radius:7px;background:none;color:var(--mute);font-weight:600;font-size:13px}
-.seg button[aria-pressed=true]{background:var(--surf);color:var(--ink);box-shadow:var(--sh)}
+.seg{display:flex;background:var(--surf2);border:1px solid var(--hair);border-radius:11px;padding:2px}
+.seg button{min-height:32px;min-width:38px;border:1px solid transparent;border-radius:8px;background:none;color:var(--mute);font-weight:600;font-size:13px}
+.seg button[aria-pressed=true]{background:var(--surf);color:var(--ink);border-color:var(--hair);box-shadow:0 1px 2px rgba(0,0,0,.1),inset 0 1px 0 var(--hi)}
 .thm{width:40px;height:40px;border-radius:99px;border:1px solid var(--line);background:var(--surf);display:grid;place-items:center;color:var(--ink)}.thm svg{width:18px;height:18px}.thm:hover{border-color:color-mix(in srgb,var(--ink) 25%,var(--line))}
 .pset{margin-top:22px}.pset h3{margin-bottom:10px}.pset .seg{display:inline-flex}.pset .seg button{padding:0 12px}
 .news{margin-top:22px;background:color-mix(in srgb,var(--ac) 10%,var(--surf));border-radius:12px;padding:14px 16px}.news h3{margin-bottom:8px}.news ul{margin:0;padding-left:18px;font-size:13.5px;display:grid;gap:4px}
@@ -54,13 +54,13 @@ main{max-width:1080px;margin:0 auto;padding:28px 20px 80px}
 .head h1{font-size:clamp(26px,3.2vw,34px)}
 .head p{color:var(--mute);margin:8px 0 0;max-width:62ch}
 .langs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
-.chip{flex:none;display:flex;align-items:center;gap:8px;min-height:38px;padding:0 12px 0 10px;border-radius:99px;border:1px solid var(--line);background:var(--surf);font-size:14px;font-weight:550;white-space:nowrap}
+.chip{flex:none;display:flex;align-items:center;gap:8px;min-height:38px;padding:0 12px 0 10px;border-radius:99px;border:1px solid var(--hair);background:var(--surf);box-shadow:inset 0 1px 0 var(--hi);font-size:14px;font-weight:550;transition:border-color .15s,background .15s;white-space:nowrap}
 .chip:hover{border-color:color-mix(in srgb,var(--ink) 25%,var(--line))}
 .chip i{width:9px;height:9px;border-radius:50%;flex:none}
 .chip small{color:var(--mute);font-size:12px;font-variant-numeric:tabular-nums}
 .chip small.full{color:var(--gold)}
-.chip[aria-current=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.chip[aria-current=true] small{color:color-mix(in srgb,var(--bg) 65%,var(--ink))}
+.chip[aria-current=true]{background:color-mix(in srgb,var(--ac) 14%,var(--surf));border-color:color-mix(in srgb,var(--ac) 55%,transparent);color:var(--ink)}
+.chip[aria-current=true] small{color:color-mix(in srgb,var(--ac) 70%,var(--ink))}
 .course{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start}
 .card{background:var(--surf);border:1px solid var(--line);border-radius:18px;box-shadow:var(--sh)}
 .intro{padding:26px}
@@ -96,8 +96,9 @@ main{max-width:1080px;margin:0 auto;padding:28px 20px 80px}
 .link{border:0;background:none;padding:0;color:var(--ac);font-weight:600;font-size:14px;text-align:left;min-height:32px}
 /* ---------- atelier ---------- */
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
-.tab{min-height:36px;padding:0 14px;border-radius:99px;border:1px solid var(--line);background:var(--surf);font-weight:550;font-size:13.5px}
-.tab[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tab{min-height:34px;padding:0 14px;border-radius:99px;border:1px solid var(--hair);background:var(--surf);box-shadow:inset 0 1px 0 var(--hi);transition:border-color .15s,background .15s;font-weight:550;font-size:13.5px}
+.tab:hover{border-color:color-mix(in srgb,var(--ink) 22%,var(--line))}
+.tab[aria-pressed=true]{background:color-mix(in srgb,var(--ac) 14%,var(--surf));border-color:color-mix(in srgb,var(--ac) 55%,transparent);color:var(--ink)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
 .cc{text-align:left;border:1px solid var(--line);border-radius:16px;background:var(--surf);padding:16px;min-height:132px;display:flex;flex-direction:column;gap:8px;position:relative;box-shadow:var(--sh);transition:transform .15s,border-color .15s}
 .cc:hover{border-color:color-mix(in srgb,var(--ink) 25%,var(--line));transform:translateY(-2px)}
@@ -226,14 +227,16 @@ table.res td.n{text-align:right;font-variant-numeric:tabular-nums}
 <script src="content/fr.js"></script>
 <script src="content/fr-extra.js"></script>
 <script src="content/en.js"></script>
+<script src="content/frontback.js"></script>
 <script src="content/challenges.js"></script>
+<script src="content/challenges-plus.js"></script>
 <script>
 {
 // ================= DONNÉES DE BASE =================
 const M=[
  {id:'py',n:'Python',ab:'Py',c:'#3776ab',t:'#fff'},{id:'js',n:'JavaScript',ab:'JS',c:'#f0c419',t:'#1b1b1b'},
  {id:'html',n:'HTML',ab:'<>',c:'#e34f26',t:'#fff'},{id:'css',n:'CSS',ab:'{}',c:'#2965f1',t:'#fff'},
- {id:'sql',n:'SQL',ab:'DB',c:'#00758f',t:'#fff'},{id:'algo',n:{fr:'Algorithmique',en:'Algorithms'},ab:'f(x)',c:'#d6336c',t:'#fff'},
+ {id:'sql',n:'SQL',ab:'DB',c:'#00758f',t:'#fff'},{id:'front',n:'Front-end',ab:'UI',c:'#db2777',t:'#fff'},{id:'back',n:'Back-end',ab:'API',c:'#059669',t:'#fff'},{id:'algo',n:{fr:'Algorithmique',en:'Algorithms'},ab:'f(x)',c:'#d6336c',t:'#fff'},
  {id:'ts',n:'TypeScript',ab:'TS',c:'#3178c6',t:'#fff'},{id:'java',n:'Java',ab:'J',c:'#b07219',t:'#fff'},
  {id:'c',n:'C',ab:'C',c:'#5c6bc0',t:'#fff'},{id:'cpp',n:'C++',ab:'C++',c:'#00599c',t:'#fff'},
  {id:'cs',n:'C#',ab:'C#',c:'#68217a',t:'#fff'},{id:'php',n:'PHP',ab:'php',c:'#777bb4',t:'#fff'},
@@ -315,9 +318,9 @@ const A=[
 // ================= ÉTAT =================
 let installOk=false;
 const KEY='codequest-v1';
-const VERSION='1.2.1';
-const NEWS={fr:['Nouvel encadré « Quoi de neuf » dans le profil, mis à jour à chaque version.','L\'appli PC se met à jour toute seule à chaque lancement.'],
- en:['New “What\'s new” box in your profile, updated with every version.','The PC app now updates itself every time it starts.']};
+const VERSION='1.3.0';
+const NEWS={fr:['Deux nouveaux parcours : Front-end et Back-end (16 leçons, 48 exercices).','18 nouveaux défis dans l\'Atelier : formulaires, cartes, grilles, routeur, pagination, sécurité, logs, SQL…','Filtres Front-end et Back-end dans l\'Atelier.','Onglets et étiquettes plus fins.'],
+ en:['Two new tracks: Front-end and Back-end (16 lessons, 48 exercises).','18 new Workshop challenges: forms, cards, grids, a router, pagination, security, logs, SQL…','Front-end and Back-end filters in the Workshop.','Sharper tabs and chips.']};
 const fresh=()=>({theme:'auto',seenV:'',xp:0,done:{},lessons:0,perfect:0,tried:{},streak:0,last:'',ach:{},night:false,early:false,cur:'py',ui:'fr',view:'path',ch:{},drafts:{},rev:{},revOk:0,asked:0,eng:{}});
 let S=fresh();
 const fixView=()=>{if(!['path','lab','review'].includes(S.view))S.view='path'};
@@ -354,7 +357,7 @@ function renderMain(){
 function renderPath(){
  const tt=t(),m=M.find(x=>x.id===S.cur)||M[0],c=C()[m.id];setColor(m.c,m.t);
  const n=c.ls.filter((_,i)=>done(m.id,i)).length,firstOpen=c.ls.findIndex((_,i)=>!done(m.id,i));
- const hasLab=CH.some(x=>x.k===m.id||(x.k==='web'&&(m.id==='html'||m.id==='css')));
+ const hasLab=CH.some(x=>x.k===m.id||x.cat===m.id||(x.k==='web'&&(m.id==='html'||m.id==='css')));
  const chips=M.map(x=>{const cx=C()[x.id],k=cx.ls.filter((_,i)=>done(x.id,i)).length,full=k===cx.ls.length;
   return `<button class="chip" data-l="${x.id}" aria-current="${S.cur===x.id}"><i style="background:${x.c}"></i>${esc(L(x.n))}<small class="${full?'full':''}">${full?'★':k+'/'+cx.ls.length}</small></button>`}).join('');
  const nx=firstOpen>-1?c.ls[firstOpen]:null;
@@ -380,9 +383,9 @@ let labSel=null,labF='all',fails={};
 function renderLab(){
  const tt=t();setColor('#8b5cf6','#fff');
  if(labSel){renderEditor();return}
- const list=CH.filter(c=>labF==='all'||c.k===labF);
+ const list=CH.filter(c=>labF==='all'||c.k===labF||c.cat===labF||(labF==='front'&&c.k==='web')||(labF==='back'&&c.k==='sql'));
  $('main').innerHTML=`<div class="head"><h1>${tt.labT}</h1><p>${tt.labD}</p><div style="max-width:420px;margin-top:16px"><div class="bar"><i style="width:${nCh()/CH.length*100}%"></i></div><div class="pt"><span>${nCh()} / ${CH.length}</span></div></div></div>
- <div><div class="tabs" role="group">${['all','js','py','sql','web'].map(k=>`<button class="tab" data-f="${k}" aria-pressed="${labF===k}">${k==='all'?tt.all:ENG[k].n}</button>`).join('')}</div>
+ <div><div class="tabs" role="group">${['all','front','back','js','py','sql','web'].map(k=>`<button class="tab" data-f="${k}" aria-pressed="${labF===k}">${k==='all'?tt.all:k==='front'?'Front-end':k==='back'?'Back-end':ENG[k].n}</button>`).join('')}</div>
  <div class="grid"><button class="cc sbx" data-c="sandbox"><h3>${tt.sbx}</h3><span style="font-size:13.5px">${tt.sbxD}</span><div class="meta"><span>JS · Python · HTML</span></div></button>
  ${list.map(c=>`<button class="cc ${S.ch[c.id]?'ok':''}" data-c="${c.id}"><span class="eng" style="background:${ENG[c.k].c};color:${ENG[c.k].t}">${ENG[c.k].n}</span><h3>${esc(L(c.t))}</h3><div class="meta"><span><span class="lvd">${'●'.repeat(c.lv)}${'○'.repeat(3-c.lv)}</span> ${tt.lv[c.lv]}</span><span>+${CHXP[c.lv]} XP</span></div></button>`).join('')}</div></div>`;
 }
@@ -591,7 +594,7 @@ $('main').addEventListener('click',e=>{
  const l=tg.closest('[data-l]');if(l){S.cur=l.dataset.l;save();render();return}
  const b=tg.closest('[data-i]');if(b&&!b.disabled){startLesson(+b.dataset.i);return}
  if(tg.closest('#seeProf')){openProf(true);return}
- if(tg.closest('#toLab')){S.view='lab';labSel=null;labF=['html','css'].includes(S.cur)?'web':['js','py','sql'].includes(S.cur)?S.cur:'all';save();render();return}
+ if(tg.closest('#toLab')){S.view='lab';labSel=null;labF=['html','css'].includes(S.cur)?'web':['js','py','sql','front','back'].includes(S.cur)?S.cur:'all';save();render();return}
  if(tg.closest('#revGo')){startReview();return}
  const f=tg.closest('[data-f]');if(f){labF=f.dataset.f;renderLab();return}
  const cc=tg.closest('[data-c]');if(cc){labSel=cc.dataset.c;renderLab();scrollTo({top:0});return}
