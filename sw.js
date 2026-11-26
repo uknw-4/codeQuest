@@ -1,6 +1,6 @@
 // Service worker : l'appli marche hors ligne et s'installe comme un logiciel.
 // Réseau d'abord (pour recevoir les mises à jour), cache en secours.
-const CACHE = 'codequest-v2';
+const CACHE = 'codequest-v3';
 const FILES = [
   './', './index.html', './manifest.webmanifest',
   './content/fr.js', './content/fr-extra.js', './content/en.js', './content/challenges.js',
