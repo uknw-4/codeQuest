@@ -41,6 +41,9 @@ svg{flex:none}
 .seg{display:flex;background:var(--surf2);border-radius:10px;padding:3px}
 .seg button{min-height:32px;min-width:38px;border:0;border-radius:7px;background:none;color:var(--mute);font-weight:600;font-size:13px}
 .seg button[aria-pressed=true]{background:var(--surf);color:var(--ink);box-shadow:var(--sh)}
+.thm{width:40px;height:40px;border-radius:99px;border:1px solid var(--line);background:var(--surf);display:grid;place-items:center;color:var(--ink)}.thm svg{width:18px;height:18px}.thm:hover{border-color:color-mix(in srgb,var(--ink) 25%,var(--line))}
+.pset{margin-top:22px}.pset h3{margin-bottom:10px}.pset .seg{display:inline-flex}.pset .seg button{padding:0 12px}
+.ver{color:var(--mute);font-size:12.5px;margin-top:14px}
 .me{display:flex;align-items:center;gap:8px;min-height:40px;padding:0 6px 0 12px;border:1px solid var(--line);border-radius:99px;background:var(--surf);font-weight:600;font-size:14px;font-variant-numeric:tabular-nums}
 .me .fire{color:#f97316;display:flex;align-items:center;gap:4px}.me .fire svg{width:16px;height:16px}
 .me .lv{width:30px;height:30px;border-radius:50%;background:var(--ac);color:#fff;display:grid;place-items:center;font-size:13px}
@@ -246,7 +249,7 @@ fr:{learn:'Apprendre',cont2:'Continuer',startC:'Commencer',allDone:'Langage term
  doneT:'Leçon terminée !',perfT:'Sans faute, bravo !',goodOf:(g,t)=>`${g} / ${t} bonnes réponses`,bonus:' · bonus +20 XP',half:' · rejouée : XP divisée par 2',streak:n=>` · série : ${n} jour${n>1?'s':''}`,
  titles:['Débutant','Apprenti','Codeur','Développeur','Expert','Hacker','Architecte','Légende'],
  xpLine:(x,r,n)=>`${x} XP · encore ${r} XP pour le niveau ${n}`,stS:'jours de série',stL:'leçons',stC:'défis réussis',stR:'à réviser',
- ach:'Succès',achHint:'Clique sur un badge pour voir comment le débloquer.',unl:' · débloqué',reset:'Réinitialiser ma progression',resetC:'Clique encore pour confirmer (tout sera effacé)',
+ theme:'Thème',thAuto:'Auto',thLight:'Clair',thDark:'Sombre',toLight:'Passer en thème clair',toDark:'Passer en thème sombre',ach:'Succès',achHint:'Clique sur un badge pour voir comment le débloquer.',unl:' · débloqué',reset:'Réinitialiser ma progression',resetC:'Clique encore pour confirmer (tout sera effacé)',
  practice:'Pratique dans l\'Atelier',
  revT:'Révisions',revD:'Les questions que tu as ratées reviennent au bon moment : demain, dans 3 jours, une semaine… jusqu\'à ce qu\'elles soient acquises. C\'est la méthode de la répétition espacée.',
  revDue:n=>n?`${n} question${n>1?'s':''} à revoir aujourd'hui`:'Rien à revoir aujourd\'hui. Reviens demain ou fais une nouvelle leçon !',revGo:'Lancer la révision',revAll:n=>`${n} question${n>1?'s':''} en mémoire au total`,
@@ -265,7 +268,7 @@ en:{learn:'Learn',cont2:'Continue',startC:'Start',allDone:'Language complete',ne
  doneT:'Lesson complete!',perfT:'Flawless, well done!',goodOf:(g,t)=>`${g} / ${t} correct`,bonus:' · bonus +20 XP',half:' · replayed: half XP',streak:n=>` · streak: ${n} day${n>1?'s':''}`,
  titles:['Beginner','Apprentice','Coder','Developer','Expert','Hacker','Architect','Legend'],
  xpLine:(x,r,n)=>`${x} XP · ${r} XP to level ${n}`,stS:'day streak',stL:'lessons',stC:'challenges',stR:'to review',
- ach:'Achievements',achHint:'Click a badge to see how to unlock it.',unl:' · unlocked',reset:'Reset my progress',resetC:'Click again to confirm (everything will be erased)',
+ theme:'Theme',thAuto:'Auto',thLight:'Light',thDark:'Dark',toLight:'Switch to light theme',toDark:'Switch to dark theme',ach:'Achievements',achHint:'Click a badge to see how to unlock it.',unl:' · unlocked',reset:'Reset my progress',resetC:'Click again to confirm (everything will be erased)',
  practice:'Practise in the Workshop',
  revT:'Review',revD:'Questions you missed come back at the right time: tomorrow, in 3 days, in a week… until you\'ve nailed them. This is spaced repetition.',
  revDue:n=>n?`${n} question${n>1?'s':''} to review today`:'Nothing to review today. Come back tomorrow or take a new lesson!',revGo:'Start review',revAll:n=>`${n} question${n>1?'s':''} in memory overall`,
@@ -311,7 +314,8 @@ const A=[
 // ================= ÉTAT =================
 let installOk=false;
 const KEY='codequest-v1';
-const fresh=()=>({xp:0,done:{},lessons:0,perfect:0,tried:{},streak:0,last:'',ach:{},night:false,early:false,cur:'py',ui:'fr',view:'path',ch:{},drafts:{},rev:{},revOk:0,asked:0,eng:{}});
+const VERSION='1.1.0';
+const fresh=()=>({theme:'auto',xp:0,done:{},lessons:0,perfect:0,tried:{},streak:0,last:'',ach:{},night:false,early:false,cur:'py',ui:'fr',view:'path',ch:{},drafts:{},rev:{},revOk:0,asked:0,eng:{}});
 let S=fresh();
 const fixView=()=>{if(!['path','lab','review'].includes(S.view))S.view='path'};
 try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(fresh(),JSON.parse(r))}catch(e){}
@@ -337,7 +341,7 @@ function renderSide(){
  const nav=(v,ic,label,extra='')=>`<button class="nav" data-v="${v}" aria-current="${S.view===v}">${icon(ic)}<span>${label}</span>${extra}</button>`;
  $('side').innerHTML=`<div class="tin"><button class="logo" data-v="path" aria-label="CodeQuest"><i>&lt;/&gt;</i><span>CodeQuest</span></button>
  <nav class="tabsN" aria-label="Navigation">${nav('path','book',tt.learn)}${nav('lab','code',tt.lab)}${nav('review','loop',tt.review,due?`<i class="pill">${due}</i>`:'')}</nav>
- <div class="tr"><div class="seg" role="group" aria-label="Langue / Language"><button data-ui="fr" aria-pressed="${S.ui==='fr'}">FR</button><button data-ui="en" aria-pressed="${S.ui==='en'}">EN</button></div>
+ <div class="tr">${(()=>{const d=isDark();return `<button class="thm" id="thm" aria-label="${d?tt.toLight:tt.toDark}" title="${d?tt.toLight:tt.toDark}">${icon(d?'sun':'moon')}</button>`})()}<div class="seg" role="group" aria-label="Langue / Language"><button data-ui="fr" aria-pressed="${S.ui==='fr'}">FR</button><button data-ui="en" aria-pressed="${S.ui==='en'}">EN</button></div>
  <button class="me" id="me" aria-label="${tt.seeProf}"><span class="fire">${icon('fire')}${S.streak}</span><span class="lv">${lv}</span></button></div></div>`;
 }
 function renderMain(){
@@ -405,7 +409,8 @@ function renderProfile(){
  <h3>${tt.ach} <span>${Object.keys(S.ach).length} / ${A.length}</span></h3>
  <div class="achs">${A.map(x=>`<button class="ach ${S.ach[x.id]?'on':''}" data-a="${x.id}" aria-label="${esc(L(x.n))}">${icon(x.i)}</button>`).join('')}</div>
  <div class="achinfo" id="achinfo">${achText(achSel)}</div>
- <div class="pfoot"><button id="install" ${installOk?'':'hidden'}>${tt.install}</button><button class="reset" id="reset">${tt.reset}</button></div>`;
+ <div class="pset"><h3>${tt.theme}</h3><div class="seg" role="group" aria-label="${tt.theme}">${[['auto',tt.thAuto],['light',tt.thLight],['dark',tt.thDark]].map(([k,l])=>`<button data-th="${k}" aria-pressed="${S.theme===k}">${l}</button>`).join('')}</div></div>
+ <div class="pfoot"><button id="install" ${installOk?'':'hidden'}>${tt.install}</button><button class="reset" id="reset">${tt.reset}</button><div class="ver">CodeQuest ${VERSION}</div></div>`;
 }
 function openProf(on){$('prof').classList.toggle('on',on);$('scrim').classList.toggle('on',on);$('prof').setAttribute('aria-hidden',!on);if(on)setTimeout(()=>$('profX')?.focus(),50)}
 function achText(id){const x=A.find(a=>a.id===id);if(!x)return '<span class="hint">'+t().achHint+'</span>';return `<b>${esc(L(x.n))}${S.ach[x.id]?t().unl:''}</b>${esc(L(x.d))}`}
@@ -573,6 +578,7 @@ function afterRun(c,pass,html){
 // ================= ÉVÉNEMENTS =================
 $('side').addEventListener('click',e=>{
  if(e.target.closest('#me')){openProf(true);return}
+ if(e.target.closest('#thm')){setTheme(isDark()?'light':'dark');return}
  const u=e.target.closest('[data-ui]');if(u){S.ui=u.dataset.ui;save();render();return}
  const v=e.target.closest('[data-v]');if(v){S.view=v.dataset.v;if(S.view==='lab')labSel=null;save();render();scrollTo({top:0});return}
  const l=e.target.closest('[data-l]');if(l){S.view='path';S.cur=l.dataset.l;save();render();scrollTo({top:0})}});
@@ -599,6 +605,7 @@ $('main').addEventListener('keydown',e=>{
 });
 $('prof').addEventListener('click',e=>{const a=e.target.closest('[data-a]');if(a){achSel=a.dataset.a;$('achinfo').innerHTML=achText(achSel);return}
  if(e.target.closest('#profX')){openProf(false);return}
+ const th=e.target.closest('[data-th]');if(th){setTheme(th.dataset.th);return}
  if(e.target.id==='reset'){const b=e.target;if(b.dataset.c){const ui=S.ui;S=fresh();S.ui=ui;save();render()}else{b.dataset.c=1;b.textContent=t().resetC}}});
 $('lbody').addEventListener('click',e=>{const o=e.target.closest('.opt');if(o)pick(+o.dataset.o);
  const c=e.target.closest('[data-cp]');if(c&&R&&R.theory){navigator.clipboard?.writeText(R.theory.ex).then(()=>{c.textContent='✓'},()=>{})}});
@@ -611,7 +618,12 @@ document.addEventListener('keydown',e=>{if(!R)return;
  if(e.key==='Enter'&&!e.target.closest('#go,.cp,#quit')){if(!$('go').disabled){e.preventDefault();next()}return}
  if(/^[1-4]$/.test(e.key)&&document.activeElement.id!=='fill')pick(+e.key-1)});
 // migration v1 → v2 : clés de révision inchangées, rien à faire
-fixView();render();
+function isDark(){return S.theme==='dark'||(S.theme!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches)}
+function applyTheme(){const r=document.documentElement;if(S.theme==='auto')delete r.dataset.theme;else r.dataset.theme=S.theme;
+ const m=document.querySelector('meta[name=theme-color]');if(m)m.content=isDark()?'#0b0b0f':'#f7f7f9'}
+function setTheme(v){S.theme=v;save();applyTheme();renderSide();renderProfile()}
+matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>{if(S.theme==='auto'){applyTheme();renderSide()}});
+fixView();applyTheme();render();
 // ================= APPLI INSTALLABLE (PWA) =================
 let installEvt=null;
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;installOk=true;const b=$('install');if(b)b.hidden=false});
