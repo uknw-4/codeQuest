@@ -1,5 +1,10 @@
 # Nouveautés de CodeQuest
 
+## 1.5.2 — 26 novembre 2026
+- Encadré **Nouveautés** déplacé à droite de l'écran Apprendre (sous les leçons sur écran moyen, en bas sur téléphone).
+- Halo de survol redessiné, plus net : liseré de verre fin en dégradé (blanc en haut, violet en bas), anneau extérieur précis de 4 px, ombre courte et légère élévation des cartes.
+- iPhone / téléphone : flou supprimé sur les barres du haut et du bas, le profil et les notifications ; flou très léger sur l'écran de leçon.
+
 ## 1.5.1 — 26 novembre 2026
 - iPhone : flou de la barre du haut et de la barre d'onglets du bas nettement réduit.
 - Survol : halo de verre fixe autour de l'élément pointé, à la place du reflet qui suivait le curseur.

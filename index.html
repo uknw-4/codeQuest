@@ -41,7 +41,7 @@ body::before{content:"";position:fixed;inset:-15%;z-index:-1;pointer-events:none
 /* ---------- barre du haut ---------- */
 .top{position:sticky;top:0;z-index:15;isolation:isolate;padding-top:env(safe-area-inset-top,0px);border-bottom:1px solid var(--hair)}
 .top::before{content:"";position:absolute;inset:0;z-index:-1;background:light-dark(rgba(246,247,252,.55),rgba(14,14,20,.5));-webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass)}
-.tin{max-width:1080px;margin:0 auto;padding:0 20px;height:64px;display:flex;align-items:center;gap:16px}
+.tin{max-width:1320px;margin:0 auto;padding:0 20px;height:64px;display:flex;align-items:center;gap:16px}
 .logo{display:flex;align-items:center;gap:10px;border:0;background:none;padding:0;font-weight:700;font-size:17px;letter-spacing:-.02em}
 .logo i{width:30px;height:30px;border-radius:9px;background:var(--ac);color:#fff;display:grid;place-items:center;font:700 12px "JetBrains Mono",monospace;font-style:normal}
 .tabsN{display:flex;gap:2px;margin:0 auto;background:var(--surf2);border:1px solid var(--hair);border-radius:13px;padding:3px}
@@ -62,11 +62,17 @@ body::before{content:"";position:fixed;inset:-15%;z-index:-1;pointer-events:none
 .me .fire{color:#f97316;display:flex;align-items:center;gap:4px}.me .fire svg{width:16px;height:16px}
 .me .lv{width:30px;height:30px;border-radius:50%;background:var(--ac);color:#fff;display:grid;place-items:center;font-size:13px}
 /* ---------- contenu ---------- */
-main{max-width:1080px;margin:0 auto;padding:28px 20px 80px}
+main{max-width:1320px;margin:0 auto;padding:28px 20px 80px}
 .head{margin-bottom:22px}
 .head h1{font-size:clamp(26px,3.2vw,34px)}
 .head p{color:var(--mute);margin:8px 0 0;max-width:62ch}
-.learn{display:grid;grid-template-columns:270px minmax(0,1fr);gap:20px;align-items:start}
+.learn{display:grid;grid-template-columns:260px minmax(0,1fr) 290px;gap:20px;align-items:start}
+.newsc{position:sticky;top:calc(84px + env(safe-area-inset-top,0px));padding:20px}
+.newsc h3{display:flex;justify-content:space-between;align-items:baseline;font-size:15px;margin-bottom:12px}.newsc h3 span{font-size:12px;font-weight:600;color:var(--ac);background:color-mix(in srgb,var(--ac) 14%,transparent);padding:2px 8px;border-radius:99px}
+.newsc ul{margin:0;padding:0;list-style:none;display:grid;gap:10px;font-size:13.5px;line-height:1.5}
+.newsc li{display:grid;grid-template-columns:8px minmax(0,1fr);gap:10px}.newsc li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--ac);margin-top:7px}
+.newsc .ver{margin-top:14px}
+@media(max-width:1200px){.learn{grid-template-columns:240px minmax(0,1fr)}.newsc{grid-column:2;position:static}}
 .lnav{position:sticky;top:calc(84px + env(safe-area-inset-top,0px));max-height:calc(100vh - 104px);overflow-y:auto;padding:10px;scrollbar-width:thin}
 .ltog{display:none}
 .grp+.grp{margin-top:4px}
@@ -86,16 +92,20 @@ main{max-width:1080px;margin:0 auto;padding:28px 20px 80px}
 .lockbox svg{width:20px;height:20px;color:var(--mute);margin-top:2px}.lockbox b{display:block}.lockbox ul{margin:6px 0 0;padding-left:18px;font-size:14px;color:var(--mute)}
 .lockbox li.ok{color:var(--ok)}
 .minis{display:flex;gap:18px;flex-wrap:wrap;margin-top:18px;font-size:13px;color:var(--mute)}.minis b{color:var(--ink);font-size:15px;margin-right:4px;font-variant-numeric:tabular-nums}
-/* survol : halo de verre qui entoure l'élément pointé */
-.hv{position:relative;isolation:isolate}
-.hv::before{content:"";position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .2s;z-index:-1;
- background:linear-gradient(180deg,light-dark(rgba(255,255,255,.9),rgba(255,255,255,.14)),light-dark(rgba(255,255,255,.35),rgba(255,255,255,.03)) 60%)}
+/* survol : halo de verre net, façon visionOS : liseré fin dégradé + anneau extérieur précis */
+.hv{position:relative;isolation:isolate;transition:background-color .16s cubic-bezier(.2,.8,.2,1),box-shadow .16s cubic-bezier(.2,.8,.2,1),border-color .16s,transform .16s cubic-bezier(.2,.8,.2,1)}
+.hv::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;pointer-events:none;opacity:0;transition:opacity .16s;
+ background:linear-gradient(170deg,light-dark(rgba(255,255,255,1),rgba(255,255,255,.62)) 0%,light-dark(rgba(255,255,255,.55),rgba(255,255,255,.14)) 45%,light-dark(rgba(139,92,246,.45),rgba(167,139,250,.35)) 100%);
+ -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
 @media(hover:hover){
  .hv:hover:not(:disabled)::before{opacity:1}
- .hv:hover:not(:disabled){border-color:light-dark(rgba(255,255,255,.95),rgba(255,255,255,.28))!important;
-  box-shadow:0 0 0 3px light-dark(rgba(255,255,255,.55),rgba(255,255,255,.07)),0 0 0 4px light-dark(rgba(139,92,246,.18),rgba(139,92,246,.22)),0 10px 30px -10px light-dark(rgba(90,60,200,.3),rgba(139,92,246,.5)),inset 0 1px 0 light-dark(#fff,rgba(255,255,255,.25));
-  background-color:light-dark(rgba(255,255,255,.7),rgba(255,255,255,.07));-webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass)}
+ .hv:hover:not(:disabled){border-color:transparent!important;
+  background-color:light-dark(rgba(255,255,255,.78),rgba(255,255,255,.055));
+  box-shadow:0 0 0 4px light-dark(rgba(139,92,246,.10),rgba(167,139,250,.10)),0 1px 2px light-dark(rgba(20,20,40,.08),rgba(0,0,0,.35)),0 10px 24px -14px light-dark(rgba(80,60,180,.35),rgba(139,92,246,.55))}
+ .li.hv:hover,.nav.hv:hover,.ls.hv:hover:not(:disabled),.gh.hv:hover,.seg .hv:hover{box-shadow:0 0 0 2px light-dark(rgba(139,92,246,.12),rgba(167,139,250,.12)),0 1px 2px light-dark(rgba(20,20,40,.08),rgba(0,0,0,.35))}
+ .cc.hv:hover,.opt.hv:hover{transform:translateY(-1px)}
  .btn.pri.hv:hover{background-color:var(--lc)}
+ .sbx.hv:hover{background-color:transparent}
 }
 .chip{flex:none;display:flex;align-items:center;gap:8px;min-height:38px;padding:0 12px 0 10px;border-radius:99px;border:1px solid var(--hair);background:var(--surf);box-shadow:inset 0 1px 0 var(--hi);font-size:14px;font-weight:550;transition:border-color .15s,background .15s;white-space:nowrap}
 .chip:hover{border-color:color-mix(in srgb,var(--ink) 25%,var(--line))}
@@ -243,17 +253,20 @@ table.res td.n{text-align:right;font-variant-numeric:tabular-nums}
 .toast.on{transform:none;opacity:1;pointer-events:auto}.toast i{flex:none;width:34px;height:34px;border-radius:10px;background:color-mix(in srgb,var(--gold) 22%,var(--surf));color:var(--gold);display:grid;place-items:center;font-style:normal}
 /* ---------- tailles d'écran ---------- */
 @media(max-width:900px){.course{grid-template-columns:minmax(0,1fr)}
- .learn{grid-template-columns:minmax(0,1fr)}
+ .learn{grid-template-columns:minmax(0,1fr)}.newsc{grid-column:auto}
  .lnav{position:static;max-height:none;overflow:visible}
  .ltog{display:flex;align-items:center;gap:10px;width:100%;min-height:48px;padding:0 12px;border:1px solid transparent;border-radius:12px;background:none;font-weight:600;text-align:left}
  .ltog i{width:10px;height:10px;border-radius:50%}.ltog span{flex:1}.ltog small{color:var(--mute);font-weight:500}
  .ltog svg{width:16px;height:16px;transition:transform .25s}.ltog[aria-expanded=true] svg{transform:rotate(180deg)}
  .ltog[aria-expanded=false]~.groups{display:none}.ltog[aria-expanded=true]~.groups{margin-top:6px;border-top:1px solid var(--hair);padding-top:6px}}
 @media(max-width:700px){
- :root{--glass-m:saturate(130%) blur(8px)}
- .top::before{background:light-dark(rgba(246,247,252,.72),rgba(14,14,20,.66));-webkit-backdrop-filter:var(--glass-m);backdrop-filter:var(--glass-m)}
+ :root{--glass-m:none}
+ .top::before{background:light-dark(rgba(244,245,250,.94),rgba(10,10,16,.92));-webkit-backdrop-filter:none;backdrop-filter:none}
+ .lesson{background:light-dark(rgba(238,240,246,.95),rgba(8,8,12,.94));-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+ .prof{background:light-dark(rgba(248,248,252,.96),rgba(16,16,22,.95));-webkit-backdrop-filter:none;backdrop-filter:none}
+ .toast{-webkit-backdrop-filter:none;backdrop-filter:none;background:light-dark(rgba(255,255,255,.96),rgba(28,28,38,.96))}
  .tin{height:58px;padding:0 16px;gap:10px}.logo span{display:none}.tr{margin-left:auto}
- .tabsN{position:fixed;left:0;right:0;bottom:0;margin:0;border-radius:0;background:light-dark(rgba(246,247,252,.74),rgba(18,18,26,.7));backdrop-filter:var(--glass-m);-webkit-backdrop-filter:var(--glass-m);border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));justify-content:space-around;z-index:15}
+ .tabsN{position:fixed;left:0;right:0;bottom:0;margin:0;border-radius:0;background:light-dark(rgba(244,245,250,.95),rgba(12,12,18,.93));backdrop-filter:none;-webkit-backdrop-filter:none;border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));justify-content:space-around;z-index:15}
  .nav{flex-direction:column;gap:2px;min-height:50px;font-size:11.5px;flex:1;position:relative}.nav[aria-current=true]{box-shadow:none;background:var(--surf2)}
  .nav .pill{position:absolute;top:2px;left:calc(50% + 6px)}
  main{padding:20px 16px 110px}
@@ -374,9 +387,9 @@ const A=[
 // ================= ÉTAT =================
 let installOk=false;
 const KEY='codequest-v1';
-const VERSION='1.5.1';
-const NEWS={fr:['Sur iPhone, le flou en haut et en bas de l\'écran est plus léger.','Au survol, l\'élément pointé s\'entoure d\'un halo de verre (sans reflet qui suit la souris).','Rappel 1.5 : langages en liste verticale dépliable, et déblocage des langages en avançant.'],
- en:['On iPhone, the blur at the top and bottom of the screen is lighter.','On hover, the pointed item gets a glass halo around it (no more highlight following the mouse).','From 1.5: languages in a collapsible vertical list, and languages unlock as you progress.']};
+const VERSION='1.5.2';
+const NEWS={fr:['Les nouveautés s\'affichent ici, à droite, au lieu du profil.','Halo de survol plus net : liseré de verre fin et dégradé, anneau précis autour, légère élévation.','Sur iPhone, plus de flou en haut et en bas : les barres sont presque opaques et bien nettes.'],
+ en:['What\'s new now shows here on the right instead of in your profile.','Sharper hover halo: thin gradient glass rim, a precise outer ring and a slight lift.','On iPhone, no more blur at the top and bottom: the bars are near-opaque and crisp.']};
 const fresh=()=>({unl:{},fold:{},langOpen:false,theme:'auto',seenV:'',xp:0,done:{},lessons:0,perfect:0,tried:{},streak:0,last:'',ach:{},night:false,early:false,cur:'py',ui:'fr',view:'path',ch:{},drafts:{},rev:{},revOk:0,asked:0,eng:{}});
 let S=fresh();
 const fixView=()=>{if(!['path','lab','review'].includes(S.view))S.view='path'};
@@ -433,7 +446,8 @@ function renderPath(){
   <div class="minis"><span><b>${S.xp}</b>XP</span><span><b>${S.streak}</b>${tt.stS}</span><span><b>${Object.keys(S.ach).length}/${A.length}</b>${tt.ach}</span><button class="link" id="seeProf">${tt.seeProf} →</button></div></section>
   <ol class="card list">${c.ls.map((ls,i)=>{const d=S.done[m.id+'-'+i];const st=d?'done':(i===firstOpen?'open':'lock');
    return `<li><button class="ls hv ${st}" data-i="${i}" ${st==='lock'?'disabled':''} aria-label="${tt.lesson} ${i+1} : ${esc(ls.n)}"><span class="num">${d?'✓':st==='lock'?icon('lock'):i+1}</span><span class="lt"><b>${esc(ls.n)}</b><small>${st==='lock'?(open?tt.locked:tt.lockedT):ls.q.length+' '+tt.ex+' · +'+(ls.q.length*10)+' XP'}</small></span><span class="go2">${d?'<span class="stars">'+'★'.repeat(d.best)+'☆'.repeat(3-d.best)+'</span>':st==='open'?tt.startC+' →':''}</span></button></li>`}).join('')}</ol>
- </div></div>`;
+ </div>
+ <aside class="card newsc" aria-label="${S.ui==='fr'?'Nouveautés':'What\'s new'}"><h3>${S.ui==='fr'?'Nouveautés':'What\'s new'} <span>v${VERSION}</span></h3><ul>${(NEWS[S.ui]||NEWS.fr).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></aside></div>`;
 }
 function renderReview(){
  const tt=t(),due=dueKeys().length;setColor('#8b5cf6','#fff');
@@ -478,7 +492,6 @@ function renderProfile(){
  <div class="achs">${A.map(x=>`<button class="ach hv ${S.ach[x.id]?'on':''}" data-a="${x.id}" aria-label="${esc(L(x.n))}">${icon(x.i)}</button>`).join('')}</div>
  <div class="achinfo" id="achinfo">${achText(achSel)}</div>
  <div class="pset"><h3>${tt.theme}</h3><div class="seg" role="group" aria-label="${tt.theme}">${[['auto',tt.thAuto],['light',tt.thLight],['dark',tt.thDark]].map(([k,l])=>`<button data-th="${k}" aria-pressed="${S.theme===k}">${l}</button>`).join('')}</div></div>
- <div class="news"><h3>${S.ui==='fr'?'Quoi de neuf':'What\'s new'} <span>v${VERSION}</span></h3><ul>${(NEWS[S.ui]||NEWS.fr).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>
  <div class="pfoot"><button id="install" ${installOk?'':'hidden'}>${tt.install}</button><button class="reset" id="reset">${tt.reset}</button><div class="ver">CodeQuest ${VERSION}</div></div>`;
 }
 function openProf(on){$('prof').classList.toggle('on',on);$('scrim').classList.toggle('on',on);$('prof').setAttribute('aria-hidden',!on);if(on)setTimeout(()=>$('profX')?.focus(),50)}
@@ -698,7 +711,7 @@ function applyTheme(){const r=document.documentElement;if(S.theme==='auto')delet
 function setTheme(v){S.theme=v;save();applyTheme();renderSide();renderProfile()}
 matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>{if(S.theme==='auto'){applyTheme();renderSide()}});
 fixView();applyTheme();render();
-if(S.seenV&&S.seenV!==VERSION){setTimeout(()=>{$('tt').textContent=(S.ui==='fr'?'Mise à jour : CodeQuest ':'Updated: CodeQuest ')+VERSION;$('td').textContent=S.ui==='fr'?'Ouvre ton profil (🔥) pour voir les nouveautés.':'Open your profile (🔥) to see what\'s new.';$('toast').classList.add('on');setTimeout(()=>$('toast').classList.remove('on'),5000)},800)}
+if(S.seenV&&S.seenV!==VERSION){setTimeout(()=>{$('tt').textContent=(S.ui==='fr'?'Mise à jour : CodeQuest ':'Updated: CodeQuest ')+VERSION;$('td').textContent=S.ui==='fr'?'Les nouveautés sont affichées à droite, dans Apprendre.':'See what\'s new on the right, in Learn.';$('toast').classList.add('on');setTimeout(()=>$('toast').classList.remove('on'),5000)},800)}
 if(S.seenV!==VERSION){S.seenV=VERSION;save()}
 // ================= APPLI INSTALLABLE (PWA) =================
 let installEvt=null;
