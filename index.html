@@ -66,7 +66,37 @@ main{max-width:1080px;margin:0 auto;padding:28px 20px 80px}
 .head{margin-bottom:22px}
 .head h1{font-size:clamp(26px,3.2vw,34px)}
 .head p{color:var(--mute);margin:8px 0 0;max-width:62ch}
-.langs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.learn{display:grid;grid-template-columns:270px minmax(0,1fr);gap:20px;align-items:start}
+.lnav{position:sticky;top:calc(84px + env(safe-area-inset-top,0px));max-height:calc(100vh - 104px);overflow-y:auto;padding:10px;scrollbar-width:thin}
+.ltog{display:none}
+.grp+.grp{margin-top:4px}
+.gh{display:flex;align-items:center;gap:8px;width:100%;min-height:36px;padding:0 10px;border:1px solid transparent;border-radius:10px;background:none;color:var(--mute);font-size:12px;font-weight:650;text-transform:uppercase;letter-spacing:.07em}
+.gh span{flex:1;text-align:left}.gh small{font-weight:600;letter-spacing:0;text-transform:none;font-variant-numeric:tabular-nums}
+.gh svg{width:14px;height:14px;transition:transform .25s}.gh[aria-expanded=false] svg{transform:rotate(-90deg)}
+.gl2{display:grid;grid-template-rows:1fr;transition:grid-template-rows .28s ease}.gl2>div{overflow:hidden;display:grid;gap:2px;padding:2px 0 6px}
+.gh[aria-expanded=false]+.gl2{grid-template-rows:0fr}.gh[aria-expanded=false]+.gl2>div{padding:0}
+.li{display:flex;align-items:center;gap:10px;width:100%;min-height:42px;padding:0 10px;border:1px solid transparent;border-radius:11px;background:none;text-align:left;font-size:14.5px;font-weight:550}
+.li i{flex:none;width:9px;height:9px;border-radius:50%}
+.li span{flex:1}
+.li small{color:var(--mute);font-size:12px;font-variant-numeric:tabular-nums}.li small.full{color:var(--gold)}
+.li small svg{width:13px;height:13px;vertical-align:-2px}
+.li.locked{color:var(--mute)}.li.locked i{opacity:.45}
+.li[aria-current=true]{background:color-mix(in srgb,var(--ac) 16%,var(--surf));border-color:color-mix(in srgb,var(--ac) 50%,transparent);box-shadow:inset 0 1px 0 var(--hi)}
+.lockbox{display:flex;gap:12px;align-items:flex-start;margin-top:18px;padding:14px 16px;border-radius:14px;background:var(--surf2);border:1px solid var(--hair)}
+.lockbox svg{width:20px;height:20px;color:var(--mute);margin-top:2px}.lockbox b{display:block}.lockbox ul{margin:6px 0 0;padding-left:18px;font-size:14px;color:var(--mute)}
+.lockbox li.ok{color:var(--ok)}
+.minis{display:flex;gap:18px;flex-wrap:wrap;margin-top:18px;font-size:13px;color:var(--mute)}.minis b{color:var(--ink);font-size:15px;margin-right:4px;font-variant-numeric:tabular-nums}
+/* survol : effet verre prononcé qui entoure la zone, avec un reflet qui suit le curseur */
+.hv{position:relative;isolation:isolate}
+.hv::before{content:"";position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .2s;z-index:-1;
+ background:radial-gradient(140px circle at var(--mx,50%) var(--my,50%),light-dark(rgba(255,255,255,.95),rgba(255,255,255,.16)),transparent 70%)}
+@media(hover:hover){
+ .hv:hover:not(:disabled)::before{opacity:1}
+ .hv:hover:not(:disabled){border-color:light-dark(rgba(255,255,255,.95),rgba(255,255,255,.28))!important;
+  box-shadow:0 0 0 1px light-dark(rgba(139,92,246,.18),rgba(255,255,255,.06)),0 8px 28px -8px light-dark(rgba(90,60,200,.28),rgba(139,92,246,.45)),inset 0 1px 0 light-dark(#fff,rgba(255,255,255,.22));
+  background-color:light-dark(rgba(255,255,255,.7),rgba(255,255,255,.07));-webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass)}
+ .btn.pri.hv:hover{background-color:var(--lc)}
+}
 .chip{flex:none;display:flex;align-items:center;gap:8px;min-height:38px;padding:0 12px 0 10px;border-radius:99px;border:1px solid var(--hair);background:var(--surf);box-shadow:inset 0 1px 0 var(--hi);font-size:14px;font-weight:550;transition:border-color .15s,background .15s;white-space:nowrap}
 .chip:hover{border-color:color-mix(in srgb,var(--ink) 25%,var(--line))}
 .chip i{width:9px;height:9px;border-radius:50%;flex:none}
@@ -212,7 +242,13 @@ table.res td.n{text-align:right;font-variant-numeric:tabular-nums}
 .toast{position:fixed;right:20px;bottom:20px;z-index:40;background:light-dark(rgba(255,255,255,.7),rgba(30,30,42,.66));-webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:12px 16px;display:flex;gap:12px;align-items:center;box-shadow:0 12px 32px rgba(0,0,0,.25);transform:translateY(30px);opacity:0;pointer-events:none;transition:transform .35s,opacity .35s;max-width:calc(100vw - 40px)}
 .toast.on{transform:none;opacity:1;pointer-events:auto}.toast i{flex:none;width:34px;height:34px;border-radius:10px;background:color-mix(in srgb,var(--gold) 22%,var(--surf));color:var(--gold);display:grid;place-items:center;font-style:normal}
 /* ---------- tailles d'écran ---------- */
-@media(max-width:900px){.course{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:900px){.course{grid-template-columns:minmax(0,1fr)}
+ .learn{grid-template-columns:minmax(0,1fr)}
+ .lnav{position:static;max-height:none;overflow:visible}
+ .ltog{display:flex;align-items:center;gap:10px;width:100%;min-height:48px;padding:0 12px;border:1px solid transparent;border-radius:12px;background:none;font-weight:600;text-align:left}
+ .ltog i{width:10px;height:10px;border-radius:50%}.ltog span{flex:1}.ltog small{color:var(--mute);font-weight:500}
+ .ltog svg{width:16px;height:16px;transition:transform .25s}.ltog[aria-expanded=true] svg{transform:rotate(180deg)}
+ .ltog[aria-expanded=false]~.groups{display:none}.ltog[aria-expanded=true]~.groups{margin-top:6px;border-top:1px solid var(--hair);padding-top:6px}}
 @media(max-width:700px){
  .tin{height:58px;padding:0 16px;gap:10px}.logo span{display:none}.tr{margin-left:auto}
  .tabsN{position:fixed;left:0;right:0;bottom:0;margin:0;border-radius:0;background:light-dark(rgba(246,247,252,.6),rgba(18,18,26,.55));backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));justify-content:space-around;z-index:15}
@@ -234,7 +270,7 @@ table.res td.n{text-align:right;font-variant-numeric:tabular-nums}
   <div class="lbody" id="lbody"></div>
   <div class="lfoot" id="lfoot"><div><div class="fb" id="fb"></div><button class="go" id="go"></button></div></div>
 </div>
-<div class="toast" id="toast" role="status"><i>★</i><div><b id="tt"></b><div id="td" style="color:#b9bcc5;font-size:13px"></div></div></div>
+<div class="toast" id="toast" role="status"><i>★</i><div><b id="tt"></b><div id="td" style="color:var(--mute);font-size:13px"></div></div></div>
 
 <script src="content/fr.js"></script>
 <script src="content/fr-extra.js"></script>
@@ -255,10 +291,16 @@ const M=[
  {id:'go',n:'Go',ab:'Go',c:'#00add8',t:'#06232b'},{id:'rs',n:'Rust',ab:'Rs',c:'#b7410e',t:'#fff'},
  {id:'rb',n:'Ruby',ab:'Rb',c:'#cc342d',t:'#fff'},{id:'sw',n:'Swift',ab:'Sw',c:'#f05138',t:'#fff'},
  {id:'kt',n:'Kotlin',ab:'Kt',c:'#7f52ff',t:'#fff'},{id:'sh',n:'Bash',ab:'$_',c:'#3a3f47',t:'#fff'}];
+const GROUPS=[['start',['py','algo']],['web',['html','css','js','ts','front','back','php']],['data',['sql']],['soft',['java','c','cpp','cs','go','rs','rb']],['mobile',['kt','sw']],['tools',['sh']]];
+const REQ={css:[['html',2]],js:[['css',2]],ts:[['js',3]],front:[['js',2],['css',2]],back:[['js',3]],php:[['back',2]],sql:[['py',3]],java:[['py',4]],cs:[['java',2]],kt:[['java',2]],sw:[['kt',2]],c:[['algo',3]],cpp:[['c',2]],rs:[['cpp',2]],go:[['py',4]],rb:[['py',3]],sh:[['lv',3]]};
+const nDone=id=>{const c=(CQ.fr[id]||{ls:[]});return c.ls.filter((_,i)=>done(id,i)).length};
+const reqOk=([id,n])=>id==='lv'?lvl(S.xp)>=n:nDone(id)>=n;
+const isOpen=id=>!REQ[id]||(S.unl&&S.unl[id])||nDone(id)>0||REQ[id].every(reqOk);
+const reqText=r=>r[0]==='lv'?t().reqLv(r[1]):t().reqL(r[1],L(M.find(x=>x.id===r[0]).n));
 const ENG={js:{n:'JavaScript',c:'#f0c419',t:'#1b1b1b'},py:{n:'Python',c:'#3776ab',t:'#fff'},sql:{n:'SQL',c:'#00758f',t:'#fff'},web:{n:'HTML/CSS',c:'#e34f26',t:'#fff'}};
 const CH=CQ.challenges,CHXP={1:30,2:50,3:80};
 const T={
-fr:{learn:'Apprendre',cont2:'Continuer',startC:'Commencer',allDone:'Langage terminé',next:'À suivre',yourStats:'Ton avancée',seeProf:'Voir mon profil',profile:'Profil',close:'Fermer',revNone:'Rien à revoir',langs:'Langages',lab:'Atelier',review:'Révisions',prof:'Prof IA',install:'Installer sur mon PC',
+fr:{changeLang:'Changer de langage',lockedT:'Langage verrouillé',lockedD:'Pour le débloquer :',reqL:(n,l)=>`Termine ${n} leçon${n>1?'s':''} de ${l}`,reqLv:n=>`Atteins le niveau ${n}`,goReq:l=>`Aller à ${l}`,unlockT:'Nouveau langage débloqué : ',unlockD:'Il t\'attend dans la liste des langages.',grp:{start:'Pour débuter',web:'Web',data:'Données',soft:'Logiciel et systèmes',mobile:'Mobile',tools:'Outils'},learn:'Apprendre',cont2:'Continuer',startC:'Commencer',allDone:'Langage terminé',next:'À suivre',yourStats:'Ton avancée',seeProf:'Voir mon profil',profile:'Profil',close:'Fermer',revNone:'Rien à revoir',langs:'Langages',lab:'Atelier',review:'Révisions',prof:'Prof IA',install:'Installer sur mon PC',
  lessonsDone:(n,t)=>`${n} leçon${n>1?'s':''} sur ${t} terminée${n>1?'s':''}`,lesson:'Leçon',locked:'Termine la leçon précédente',replay:'rejouer',ex:'exercices',
  start:'Commencer',check:'Valider',cont:'Continuer',finish:'Terminer',keys:'Touches 1–4 pour choisir · Entrée pour valider · Échap pour quitter',
  good:'Bien joué !',bad:'Pas tout à fait.',answer:' Réponse : ',explain:'Explique-moi (Prof IA)',exercise:'Exercice',
@@ -277,7 +319,7 @@ fr:{learn:'Apprendre',cont2:'Continuer',startC:'Commencer',allDone:'Langage term
  passAll:'Tous les tests passent. Défi réussi !',passXp:x=>` +${x} XP`,fail:(p,t)=>`${p} / ${t} tests réussis. Corrige et réessaie !`,ban:w=>`Interdit d'utiliser ${w} pour ce défi.`,
  table:'Voir la table games',rows:'Ton résultat',noRows:'Aucune ligne.',sqlOk:'Résultat correct. Défi réussi !',sqlBad:'Le résultat ne correspond pas à ce qui est demandé.',
  preview:'Aperçu',checks:'Vérifications',engine:'Langage',sbxRun:'Code exécuté.'},
-en:{learn:'Learn',cont2:'Continue',startC:'Start',allDone:'Language complete',next:'Up next',yourStats:'Your progress',seeProf:'See my profile',profile:'Profile',close:'Close',revNone:'Nothing to review',langs:'Languages',lab:'Workshop',review:'Review',prof:'AI tutor',install:'Install on my PC',
+en:{changeLang:'Change language',lockedT:'Language locked',lockedD:'To unlock it:',reqL:(n,l)=>`Finish ${n} ${l} lesson${n>1?'s':''}`,reqLv:n=>`Reach level ${n}`,goReq:l=>`Go to ${l}`,unlockT:'New language unlocked: ',unlockD:'It\'s waiting in the language list.',grp:{start:'Getting started',web:'Web',data:'Data',soft:'Software and systems',mobile:'Mobile',tools:'Tools'},learn:'Learn',cont2:'Continue',startC:'Start',allDone:'Language complete',next:'Up next',yourStats:'Your progress',seeProf:'See my profile',profile:'Profile',close:'Close',revNone:'Nothing to review',langs:'Languages',lab:'Workshop',review:'Review',prof:'AI tutor',install:'Install on my PC',
  lessonsDone:(n,t)=>`${n} of ${t} lesson${t>1?'s':''} completed`,lesson:'Lesson',locked:'Finish the previous lesson',replay:'replay',ex:'exercises',
  start:'Start',check:'Check',cont:'Continue',finish:'Finish',keys:'Keys 1–4 to choose · Enter to check · Esc to quit',
  good:'Nice one!',bad:'Not quite.',answer:' Answer: ',explain:'Explain it to me (AI tutor)',exercise:'Exercise',
@@ -330,10 +372,10 @@ const A=[
 // ================= ÉTAT =================
 let installOk=false;
 const KEY='codequest-v1';
-const VERSION='1.4.0';
-const NEWS={fr:['Nouveau look en verre translucide, façon Apple, en clair comme en sombre.','CodeQuest s\'installe sur iPhone et iPad depuis Safari (Partager → Sur l\'écran d\'accueil).','Prise en compte de l\'encoche et de la barre du bas sur iPhone.'],
- en:['New translucent glass look, Apple-style, in light and dark.','CodeQuest installs on iPhone and iPad from Safari (Share → Add to Home Screen).','Handles the iPhone notch and home bar.']};
-const fresh=()=>({theme:'auto',seenV:'',xp:0,done:{},lessons:0,perfect:0,tried:{},streak:0,last:'',ach:{},night:false,early:false,cur:'py',ui:'fr',view:'path',ch:{},drafts:{},rev:{},revOk:0,asked:0,eng:{}});
+const VERSION='1.5.0';
+const NEWS={fr:['Les langages sont maintenant dans une liste verticale, rangée par catégories qu\'on peut déplier et replier.','Système de déblocage : commence par Python, Algorithmique et HTML, les autres langages se débloquent en avançant.','Effet verre renforcé au survol : la zone sous le curseur s\'illumine et un reflet suit la souris.'],
+ en:['Languages now sit in a vertical list, sorted into categories you can expand and collapse.','Unlock system: start with Python, Algorithms and HTML, the other languages unlock as you progress.','Stronger glass effect on hover: the area under the cursor lights up and a highlight follows the mouse.']};
+const fresh=()=>({unl:{},fold:{},langOpen:false,theme:'auto',seenV:'',xp:0,done:{},lessons:0,perfect:0,tried:{},streak:0,last:'',ach:{},night:false,early:false,cur:'py',ui:'fr',view:'path',ch:{},drafts:{},rev:{},revOk:0,asked:0,eng:{}});
 let S=fresh();
 const fixView=()=>{if(!['path','lab','review'].includes(S.view))S.view='path'};
 try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(fresh(),JSON.parse(r))}catch(e){}
@@ -356,11 +398,11 @@ function md(s){return String(s).split('```').map((p,i)=>{if(i%2){const nl=p.inde
 // ================= RENDU : NAVIGATION =================
 function renderSide(){
  const tt=t(),due=dueKeys().length,lv=lvl(S.xp);
- const nav=(v,ic,label,extra='')=>`<button class="nav" data-v="${v}" aria-current="${S.view===v}">${icon(ic)}<span>${label}</span>${extra}</button>`;
+ const nav=(v,ic,label,extra='')=>`<button class="nav hv" data-v="${v}" aria-current="${S.view===v}">${icon(ic)}<span>${label}</span>${extra}</button>`;
  $('side').innerHTML=`<div class="tin"><button class="logo" data-v="path" aria-label="CodeQuest"><i>&lt;/&gt;</i><span>CodeQuest</span></button>
  <nav class="tabsN" aria-label="Navigation">${nav('path','book',tt.learn)}${nav('lab','code',tt.lab)}${nav('review','loop',tt.review,due?`<i class="pill">${due}</i>`:'')}</nav>
- <div class="tr">${(()=>{const d=isDark();return `<button class="thm" id="thm" aria-label="${d?tt.toLight:tt.toDark}" title="${d?tt.toLight:tt.toDark}">${icon(d?'sun':'moon')}</button>`})()}<div class="seg" role="group" aria-label="Langue / Language"><button data-ui="fr" aria-pressed="${S.ui==='fr'}">FR</button><button data-ui="en" aria-pressed="${S.ui==='en'}">EN</button></div>
- <button class="me" id="me" aria-label="${tt.seeProf}"><span class="fire">${icon('fire')}${S.streak}</span><span class="lv">${lv}</span></button></div></div>`;
+ <div class="tr">${(()=>{const d=isDark();return `<button class="thm hv" id="thm" aria-label="${d?tt.toLight:tt.toDark}" title="${d?tt.toLight:tt.toDark}">${icon(d?'sun':'moon')}</button>`})()}<div class="seg" role="group" aria-label="Langue / Language"><button data-ui="fr" aria-pressed="${S.ui==='fr'}">FR</button><button data-ui="en" aria-pressed="${S.ui==='en'}">EN</button></div>
+ <button class="me hv" id="me" aria-label="${tt.seeProf}"><span class="fire">${icon('fire')}${S.streak}</span><span class="lv">${lv}</span></button></div></div>`;
 }
 function renderMain(){
  document.documentElement.lang=S.ui;
@@ -368,28 +410,34 @@ function renderMain(){
 }
 function renderPath(){
  const tt=t(),m=M.find(x=>x.id===S.cur)||M[0],c=C()[m.id];setColor(m.c,m.t);
- const n=c.ls.filter((_,i)=>done(m.id,i)).length,firstOpen=c.ls.findIndex((_,i)=>!done(m.id,i));
+ const open=isOpen(m.id);
+ const n=c.ls.filter((_,i)=>done(m.id,i)).length,firstOpen=open?c.ls.findIndex((_,i)=>!done(m.id,i)):-2;
  const hasLab=CH.some(x=>x.k===m.id||x.cat===m.id||(x.k==='web'&&(m.id==='html'||m.id==='css')));
- const chips=M.map(x=>{const cx=C()[x.id],k=cx.ls.filter((_,i)=>done(x.id,i)).length,full=k===cx.ls.length;
-  return `<button class="chip" data-l="${x.id}" aria-current="${S.cur===x.id}"><i style="background:${x.c}"></i>${esc(L(x.n))}<small class="${full?'full':''}">${full?'★':k+'/'+cx.ls.length}</small></button>`}).join('');
+ const chev='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+ const item=id=>{const x=M.find(y=>y.id===id),cx=C()[id],k=cx.ls.filter((_,i)=>done(id,i)).length,full=k===cx.ls.length,op=isOpen(id);
+  return `<button class="li hv ${op?'':'locked'}" data-l="${id}" aria-current="${S.cur===id}" ${op?'':`title="${esc(REQ[id].map(reqText).join(' · '))}"`}><i style="background:${x.c}"></i><span>${esc(L(x.n))}</span><small class="${full?'full':''}">${!op?icon('lock'):full?'★':k+'/'+cx.ls.length}</small></button>`};
+ const groups=GROUPS.map(([g,ids])=>{const exp=!S.fold[g];const dn=ids.filter(id=>isOpen(id)).length;
+  return `<div class="grp"><button class="gh" data-g="${g}" aria-expanded="${exp}">${chev}<span>${tt.grp[g]}</span><small>${dn}/${ids.length}</small></button><div class="gl2"><div>${ids.map(item).join('')}</div></div></div>`}).join('');
  const nx=firstOpen>-1?c.ls[firstOpen]:null;
- $('main').innerHTML=`<nav class="langs" aria-label="${tt.langs}">${chips}</nav>
- <div class="course"><div>
+ const lockHtml=open?'':`<div class="lockbox">${icon('lock')}<div><b>${tt.lockedT}</b>${tt.lockedD}<ul>${REQ[m.id].map(r=>`<li class="${reqOk(r)?'ok':''}">${reqOk(r)?'✓ ':''}${esc(reqText(r))}</li>`).join('')}</ul></div></div>`;
+ const firstReq=open?null:REQ[m.id].find(r=>!reqOk(r)&&r[0]!=='lv');
+ $('main').innerHTML=`<div class="learn">
+ <nav class="card lnav" aria-label="${tt.langs}"><button class="ltog hv" id="ltog" aria-expanded="${!!S.langOpen}"><i style="background:${m.c}"></i><span>${esc(L(m.n))}</span><small>${tt.changeLang}</small>${chev}</button><div class="groups">${groups}</div></nav>
+ <div>
   <section class="card intro"><div class="ttl"><span class="badge" style="background:${m.c};color:${m.t}">${esc(m.ab)}</span><h1>${esc(L(m.n))}</h1></div>
   <p>${esc(c.d)}</p><div class="bar"><i style="width:${n/c.ls.length*100}%"></i></div><div class="pt"><span>${tt.lessonsDone(n,c.ls.length)}</span><span>${Math.round(n/c.ls.length*100)} %</span></div>
-  <div class="acts">${nx?`<button class="btn pri" data-i="${firstOpen}">${n?tt.cont2:tt.startC} · ${esc(nx.n)}</button>`:`<span class="btn" aria-disabled="true">★ ${tt.allDone}</span>`}${hasLab?`<button class="btn" id="toLab">${tt.practice}</button>`:''}</div></section>
+  ${lockHtml}
+  <div class="acts">${!open?(firstReq?`<button class="btn pri hv" data-l="${firstReq[0]}">${esc(tt.goReq(L(M.find(x=>x.id===firstReq[0]).n)))} →</button>`:''):nx?`<button class="btn pri hv" data-i="${firstOpen}">${n?tt.cont2:tt.startC} · ${esc(nx.n)}</button>`:`<span class="btn" aria-disabled="true">★ ${tt.allDone}</span>`}${hasLab&&open?`<button class="btn hv" id="toLab">${tt.practice}</button>`:''}</div>
+  <div class="minis"><span><b>${S.xp}</b>XP</span><span><b>${S.streak}</b>${tt.stS}</span><span><b>${Object.keys(S.ach).length}/${A.length}</b>${tt.ach}</span><button class="link" id="seeProf">${tt.seeProf} →</button></div></section>
   <ol class="card list">${c.ls.map((ls,i)=>{const d=S.done[m.id+'-'+i];const st=d?'done':(i===firstOpen?'open':'lock');
-   return `<li><button class="ls ${st}" data-i="${i}" ${st==='lock'?'disabled':''} aria-label="${tt.lesson} ${i+1} : ${esc(ls.n)}"><span class="num">${d?'✓':st==='lock'?icon('lock'):i+1}</span><span class="lt"><b>${esc(ls.n)}</b><small>${st==='lock'?tt.locked:ls.q.length+' '+tt.ex+' · +'+(ls.q.length*10)+' XP'}</small></span><span class="go2">${d?'<span class="stars">'+'★'.repeat(d.best)+'☆'.repeat(3-d.best)+'</span>':st==='open'?tt.startC+' →':''}</span></button></li>`}).join('')}</ol>
- </div>
- <aside class="card side2"><h3>${tt.yourStats}</h3>
-  <div class="kv"><div><b>${S.xp}</b><span>XP</span></div><div><b>${S.streak}</b><span>${tt.stS}</span></div><div><b>${S.lessons}</b><span>${tt.stL}</span></div><div><b>${Object.keys(S.ach).length}/${A.length}</b><span>${tt.ach}</span></div></div>
-  <button class="link" id="seeProf">${tt.seeProf} →</button></aside></div>`;
+   return `<li><button class="ls hv ${st}" data-i="${i}" ${st==='lock'?'disabled':''} aria-label="${tt.lesson} ${i+1} : ${esc(ls.n)}"><span class="num">${d?'✓':st==='lock'?icon('lock'):i+1}</span><span class="lt"><b>${esc(ls.n)}</b><small>${st==='lock'?(open?tt.locked:tt.lockedT):ls.q.length+' '+tt.ex+' · +'+(ls.q.length*10)+' XP'}</small></span><span class="go2">${d?'<span class="stars">'+'★'.repeat(d.best)+'☆'.repeat(3-d.best)+'</span>':st==='open'?tt.startC+' →':''}</span></button></li>`}).join('')}</ol>
+ </div></div>`;
 }
 function renderReview(){
  const tt=t(),due=dueKeys().length;setColor('#8b5cf6','#fff');
  $('main').innerHTML=`<div class="head"><h1>${tt.revT}</h1><p>${tt.revD}</p></div>
  <section class="card rev"><div class="big">${due}</div><p class="note" style="margin:4px 0 18px">${tt.revDue(due)}</p>
- ${due?`<button class="btn pri" id="revGo">${tt.revGo}</button>`:''}<p class="note" style="margin:18px 0 0">${tt.revAll(Object.keys(S.rev).length)}</p></section>`;
+ ${due?`<button class="btn pri hv" id="revGo">${tt.revGo}</button>`:''}<p class="note" style="margin:18px 0 0">${tt.revAll(Object.keys(S.rev).length)}</p></section>`;
 }
 let labSel=null,labF='all',fails={};
 function renderLab(){
@@ -397,9 +445,9 @@ function renderLab(){
  if(labSel){renderEditor();return}
  const list=CH.filter(c=>labF==='all'||c.k===labF||c.cat===labF||(labF==='front'&&c.k==='web')||(labF==='back'&&c.k==='sql'));
  $('main').innerHTML=`<div class="head"><h1>${tt.labT}</h1><p>${tt.labD}</p><div style="max-width:420px;margin-top:16px"><div class="bar"><i style="width:${nCh()/CH.length*100}%"></i></div><div class="pt"><span>${nCh()} / ${CH.length}</span></div></div></div>
- <div><div class="tabs" role="group">${['all','front','back','js','py','sql','web'].map(k=>`<button class="tab" data-f="${k}" aria-pressed="${labF===k}">${k==='all'?tt.all:k==='front'?'Front-end':k==='back'?'Back-end':ENG[k].n}</button>`).join('')}</div>
- <div class="grid"><button class="cc sbx" data-c="sandbox"><h3>${tt.sbx}</h3><span style="font-size:13.5px">${tt.sbxD}</span><div class="meta"><span>JS · Python · HTML</span></div></button>
- ${list.map(c=>`<button class="cc ${S.ch[c.id]?'ok':''}" data-c="${c.id}"><span class="eng" style="background:${ENG[c.k].c};color:${ENG[c.k].t}">${ENG[c.k].n}</span><h3>${esc(L(c.t))}</h3><div class="meta"><span><span class="lvd">${'●'.repeat(c.lv)}${'○'.repeat(3-c.lv)}</span> ${tt.lv[c.lv]}</span><span>+${CHXP[c.lv]} XP</span></div></button>`).join('')}</div></div>`;
+ <div><div class="tabs" role="group">${['all','front','back','js','py','sql','web'].map(k=>`<button class="tab hv" data-f="${k}" aria-pressed="${labF===k}">${k==='all'?tt.all:k==='front'?'Front-end':k==='back'?'Back-end':ENG[k].n}</button>`).join('')}</div>
+ <div class="grid"><button class="cc sbx hv" data-c="sandbox"><h3>${tt.sbx}</h3><span style="font-size:13.5px">${tt.sbxD}</span><div class="meta"><span>JS · Python · HTML</span></div></button>
+ ${list.map(c=>`<button class="cc hv ${S.ch[c.id]?'ok':''}" data-c="${c.id}"><span class="eng" style="background:${ENG[c.k].c};color:${ENG[c.k].t}">${ENG[c.k].n}</span><h3>${esc(L(c.t))}</h3><div class="meta"><span><span class="lvd">${'●'.repeat(c.lv)}${'○'.repeat(3-c.lv)}</span> ${tt.lv[c.lv]}</span><span>+${CHXP[c.lv]} XP</span></div></button>`).join('')}</div></div>`;
 }
 let sbxEng='js';
 function renderEditor(){
@@ -407,13 +455,13 @@ function renderEditor(){
  const dk=sb?'sbx-'+sbxEng:c.id;
  const code=S.drafts[dk]??(sb?{js:`console.log("${S.ui==='fr'?'Salut !':'Hello!'}");\n`,py:`print("${S.ui==='fr'?'Salut !':'Hello!'}")\n`,web:`<h1>${S.ui==='fr'?'Salut !':'Hello!'}</h1>\n`}[sbxEng]:L(c.s));
  const k=sb?sbxEng:c.k;
- $('main').innerHTML=`<div><div class="lh"><button class="back" id="labBack">${tt.back}</button>
+ $('main').innerHTML=`<div><div class="lh"><button class="back hv" id="labBack">${tt.back}</button>
  ${sb?`<h2>${tt.sbx}</h2><div class="tabs" style="margin:0">${['js','py','web'].map(e=>`<button class="tab" data-sb="${e}" aria-pressed="${sbxEng===e}">${ENG[e].n}</button>`).join('')}</div>`
  :`<span class="eng" style="background:${ENG[c.k].c};color:${ENG[c.k].t}">${ENG[c.k].n}</span><h2>${esc(L(c.t))}</h2><span class="note"><span class="lvd">${'●'.repeat(c.lv)}${'○'.repeat(3-c.lv)}</span> ${tt.lv[c.lv]} · +${CHXP[c.lv]} XP${S.ch[c.id]?' · ✓':''}</span>`}</div>
  ${sb?`<p class="desc">${tt.sbxD}</p>`:`<p class="desc">${esc(L(c.d))}</p>`}
  ${k==='sql'?`<details style="margin-bottom:12px"><summary style="cursor:pointer;font-weight:600;min-height:32px">${tt.table}</summary><div class="scroll" id="sqlTable"></div></details>`:''}
  <textarea class="code" id="code" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Code">${esc(code)}</textarea>
- <div class="tools"><button class="btn pri" id="run">${tt.run} <span style="opacity:.75;font-weight:500">· ${tt.runK}</span></button>
+ <div class="tools"><button class="btn pri hv" id="run">${tt.run} <span style="opacity:.75;font-weight:500">· ${tt.runK}</span></button>
  ${!sb&&(fails[c.id]>=2||S.ch[c.id])?`<button class="btn" id="showSol">${tt.sol}</button>`:''}</div>
  <div class="out" id="out"></div><div class="aibox" id="ai"></div></div>`;
  if(k==='sql')loadSql().then(a=>{const db=new a.Database();db.exec(CQ.sqlSetup);$('sqlTable')&&($('sqlTable').innerHTML=resTable(db.exec('SELECT * FROM games')))}).catch(()=>{});
@@ -425,7 +473,7 @@ function renderProfile(){
  <div class="lvl"><div class="ring" style="--p:${p}%"><div>${lv}</div></div><div><h2>${tt.titles[Math.min(7,Math.floor((lv-1)/2))]}</h2><p>${tt.xpLine(S.xp,b-S.xp,lv+1)}</p></div></div>
  <div class="stats"><div class="stat"><b>${S.streak}</b><span>${tt.stS}</span></div><div class="stat"><b>${S.lessons}</b><span>${tt.stL}</span></div><div class="stat"><b>${nCh()}</b><span>${tt.stC}</span></div><div class="stat"><b>${dueKeys().length}</b><span>${tt.stR}</span></div></div>
  <h3>${tt.ach} <span>${Object.keys(S.ach).length} / ${A.length}</span></h3>
- <div class="achs">${A.map(x=>`<button class="ach ${S.ach[x.id]?'on':''}" data-a="${x.id}" aria-label="${esc(L(x.n))}">${icon(x.i)}</button>`).join('')}</div>
+ <div class="achs">${A.map(x=>`<button class="ach hv ${S.ach[x.id]?'on':''}" data-a="${x.id}" aria-label="${esc(L(x.n))}">${icon(x.i)}</button>`).join('')}</div>
  <div class="achinfo" id="achinfo">${achText(achSel)}</div>
  <div class="pset"><h3>${tt.theme}</h3><div class="seg" role="group" aria-label="${tt.theme}">${[['auto',tt.thAuto],['light',tt.thLight],['dark',tt.thDark]].map(([k,l])=>`<button data-th="${k}" aria-pressed="${S.theme===k}">${l}</button>`).join('')}</div></div>
  <div class="news"><h3>${S.ui==='fr'?'Quoi de neuf':'What\'s new'} <span>v${VERSION}</span></h3><ul>${(NEWS[S.ui]||NEWS.fr).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>
@@ -437,7 +485,7 @@ const render=()=>{renderSide();renderMain();renderProfile()};
 // ================= LEÇONS / RÉVISIONS / ENTRAÎNEMENT =================
 let R=null;
 function openRun(o){R=Object.assign({step:o.theory?-1:0,err:0,xp:0,sel:null,checked:false},o);$('lesson').classList.add('on');$('lfoot').className='lfoot';$('fb').innerHTML='';$('lbar').style.width='0%';if(!o.loading)showStep()}
-function startLesson(i){const m=M.find(x=>x.id===S.cur),ls=C()[m.id].ls[i];
+function startLesson(i){if(!isOpen(S.cur))return;const m=M.find(x=>x.id===S.cur),ls=C()[m.id].ls[i];
  openRun({mode:'lesson',li:i,lang:m.id,title:L(m.n)+' · '+t().lesson+' '+(i+1),theory:ls,qs:ls.q.map((q,j)=>({q,key:m.id+'|'+i+'|'+j}))})}
 function startReview(){const ks=dueKeys().sort(()=>Math.random()-.5).slice(0,10);if(!ks.length)return;
  openRun({mode:'review',title:t().revT,qs:ks.map(k=>({q:getQ(k),key:k}))})}
@@ -452,7 +500,7 @@ function showStep(){
  const q=qs[step].q;
  let h=`<span class="tag">${esc(R.title)} · ${tt.exercise} ${step+1} / ${tot}</span><h2>${esc(q.p)}</h2>`;
  if(q.t==='f')h+=`<pre><code>${esc(q.c)}</code></pre><input class="fill" id="fill" autocomplete="off" spellcheck="false" autocapitalize="off" aria-label="${esc(q.p)}">`;
- else{if(q.c)h+=`<pre><code>${esc(q.c)}</code></pre>`;h+=`<div class="opts">${q.o.map((o,j)=>`<button class="opt" data-o="${j}"><kbd>${j+1}</kbd><code>${esc(o)}</code></button>`).join('')}</div>`}
+ else{if(q.c)h+=`<pre><code>${esc(q.c)}</code></pre>`;h+=`<div class="opts">${q.o.map((o,j)=>`<button class="opt hv" data-o="${j}"><kbd>${j+1}</kbd><code>${esc(o)}</code></button>`).join('')}</div>`}
  $('lbody').innerHTML=h;$('lbody').scrollTop=0;go.textContent=tt.check;go.disabled=true;
  const f=$('fill');if(f){f.focus();f.addEventListener('input',()=>{go.disabled=!f.value.trim()})}
 }
@@ -475,7 +523,10 @@ function check(){
  $('go').textContent=R.step===R.qs.length-1?tt.finish:tt.cont;$('go').disabled=false;$('go').focus();
 }
 function bumpDay(){const td=day();if(S.last!==td){S.streak=S.last===day(-1)?S.streak+1:1;S.last=td}const h=new Date().getHours();if(h>=23)S.night=true;if(h<8)S.early=true}
-function award(){const news=A.filter(a=>!S.ach[a.id]&&a.f(S));news.forEach(a=>S.ach[a.id]=Date.now());news.forEach((a,j)=>setTimeout(()=>toast(a),500+j*2600));return news}
+function award(){const news=A.filter(a=>!S.ach[a.id]&&a.f(S));news.forEach(a=>S.ach[a.id]=Date.now());news.forEach((a,j)=>setTimeout(()=>toast(a),500+j*2600));
+ const nl=M.filter(m=>REQ[m.id]&&!S.unl[m.id]&&isOpen(m.id));nl.forEach(m=>S.unl[m.id]=Date.now());
+ nl.forEach((m,j)=>setTimeout(()=>note(t().unlockT+L(m.n),t().unlockD),500+(news.length+j)*2600));return news}
+function note(title,desc){$('tt').textContent=title;$('td').textContent=desc;$('toast').classList.add('on');clearTimeout(tT);tT=setTimeout(()=>$('toast').classList.remove('on'),2400)}
 function finish(){
  const tt=t(),tot=R.qs.length,good=tot-R.err,perfect=R.err===0;let gain=R.xp,extra='';
  if(R.mode==='lesson'){const k=R.lang+'-'+R.li,first=!S.done[k],best=good===tot?3:good>=tot-1?2:1;
@@ -603,7 +654,9 @@ $('side').addEventListener('click',e=>{
  const l=e.target.closest('[data-l]');if(l){S.view='path';S.cur=l.dataset.l;save();render();scrollTo({top:0})}});
 $('main').addEventListener('click',e=>{
  const tg=e.target;
- const l=tg.closest('[data-l]');if(l){S.cur=l.dataset.l;save();render();return}
+ const g=tg.closest('[data-g]');if(g){S.fold[g.dataset.g]=!S.fold[g.dataset.g];save();g.setAttribute('aria-expanded',!S.fold[g.dataset.g]);return}
+ if(tg.closest('#ltog')){S.langOpen=!S.langOpen;save();$('ltog').setAttribute('aria-expanded',S.langOpen);return}
+ const l=tg.closest('[data-l]');if(l){S.cur=l.dataset.l;if(matchMedia('(max-width:900px)').matches)S.langOpen=false;save();render();if(!l.classList.contains('li'))scrollTo({top:0});return}
  const b=tg.closest('[data-i]');if(b&&!b.disabled){startLesson(+b.dataset.i);return}
  if(tg.closest('#seeProf')){openProf(true);return}
  if(tg.closest('#toLab')){S.view='lab';labSel=null;labF=['html','css'].includes(S.cur)?'web':['js','py','sql','front','back'].includes(S.cur)?S.cur:'all';save();render();return}
@@ -642,6 +695,7 @@ function applyTheme(){const r=document.documentElement;if(S.theme==='auto')delet
  const m=document.querySelector('meta[name=theme-color]');if(m)m.content=isDark()?'#08080c':'#eef0f6'}
 function setTheme(v){S.theme=v;save();applyTheme();renderSide();renderProfile()}
 matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>{if(S.theme==='auto'){applyTheme();renderSide()}});
+document.addEventListener('pointermove',e=>{const h=e.target.closest&&e.target.closest('.hv');if(!h)return;const r=h.getBoundingClientRect();h.style.setProperty('--mx',(e.clientX-r.left)+'px');h.style.setProperty('--my',(e.clientY-r.top)+'px')},{passive:true});
 fixView();applyTheme();render();
 if(S.seenV&&S.seenV!==VERSION){setTimeout(()=>{$('tt').textContent=(S.ui==='fr'?'Mise à jour : CodeQuest ':'Updated: CodeQuest ')+VERSION;$('td').textContent=S.ui==='fr'?'Ouvre ton profil (🔥) pour voir les nouveautés.':'Open your profile (🔥) to see what\'s new.';$('toast').classList.add('on');setTimeout(()=>$('toast').classList.remove('on'),5000)},800)}
 if(S.seenV!==VERSION){S.seenV=VERSION;save()}

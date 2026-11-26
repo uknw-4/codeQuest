@@ -7,7 +7,7 @@ Une appli gratuite pour apprendre à coder, en français et en anglais.
 - **20 parcours** : Python, JavaScript, HTML, CSS, SQL, Front-end, Back-end, Algorithmique, TypeScript, Java, C, C++, C#, PHP, Go, Rust, Ruby, Swift, Kotlin, Bash (240 exercices)
 - **Atelier** : 45 défis où l'on écrit du vrai code (JavaScript, Python, SQL, HTML/CSS), vérifié automatiquement par des tests, plus un bac à sable
 - **Révisions espacées** : les questions ratées reviennent au bon moment
-- **Progression** : XP, niveaux, séries de jours, 25 succès
+- **Progression** : XP, niveaux, séries de jours, 24 succès, langages à débloquer
 - Installable sur PC (`CodeQuest.exe`) et sur iPhone / iPad (depuis Safari : Partager → Sur l'écran d'accueil), utilisable hors ligne (sauf le premier chargement de Python)
 
 Aucun serveur, aucune base de données : ta progression reste dans ton navigateur.

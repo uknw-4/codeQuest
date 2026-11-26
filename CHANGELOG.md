@@ -1,5 +1,10 @@
 # Nouveautés de CodeQuest
 
+## 1.5.0 — 26 novembre 2026
+- **Liste des langages verticale**, à gauche, rangée en catégories (Pour débuter, Web, Données, Logiciel et systèmes, Mobile, Outils) qu'on peut **déplier / replier**. Sur téléphone, la liste se déroule depuis le bouton « Changer de langage ».
+- **Système de déblocage** : Python, Algorithmique et HTML sont ouverts dès le départ. Les autres langages se débloquent en terminant des leçons (ex. CSS ← 2 leçons de HTML, JavaScript ← 2 leçons de CSS, SQL ← 3 leçons de Python, Bash ← niveau 3). Un langage verrouillé montre ce qu'il faut faire et un bouton pour y aller. Une notification annonce chaque nouveau langage débloqué. Les langages déjà commencés restent ouverts.
+- **Effet verre au survol** : la zone sous le curseur s'entoure d'un halo en verre, avec un reflet qui suit la souris (onglets, langages, leçons, défis, réponses, boutons).
+
 ## 1.4.0 — 26 novembre 2026
 - **Look en verre translucide**, façon Apple : fond coloré flou, panneaux en verre dépoli, barre du haut, profil et leçons transparents. En thème clair comme en sombre.
 - **iPhone et iPad** : CodeQuest s'installe depuis Safari (Partager → Sur l'écran d'accueil) et s'ouvre en plein écran comme une appli, avec sa propre icône.
