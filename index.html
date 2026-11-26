@@ -245,6 +245,8 @@ table.res td.n{text-align:right;font-variant-numeric:tabular-nums}
 .go{min-height:50px;padding:0 30px;border-radius:14px;border:0;background:var(--lc);color:var(--lt);font-weight:650;font-size:16px}
 .go:disabled{opacity:.35;cursor:default}
 .hint{font-size:13px;color:var(--mute)}
+.cstep{min-height:220px;margin-top:6px}
+.cres{margin-top:12px}.cres:empty{display:none}.cres h4{margin:12px 0 6px;font:600 12.5px Inter,sans-serif;color:var(--mute);text-transform:uppercase;letter-spacing:.06em}
 .end{text-align:center;padding-top:6vh}
 .end .big{font-weight:750;font-size:clamp(54px,8vw,84px);color:var(--ac);line-height:1;letter-spacing:-.04em}
 .newa{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:22px}
@@ -293,6 +295,7 @@ table.res td.n{text-align:right;font-variant-numeric:tabular-nums}
 <script src="content/frontback.js"></script>
 <script src="content/challenges.js"></script>
 <script src="content/challenges-plus.js"></script>
+<script src="content/code-ex.js"></script>
 <script>
 {
 // ================= DONNÉES DE BASE =================
@@ -315,7 +318,7 @@ const reqText=r=>r[0]==='lv'?t().reqLv(r[1]):t().reqL(r[1],L(M.find(x=>x.id===r[
 const ENG={js:{n:'JavaScript',c:'#f0c419',t:'#1b1b1b'},py:{n:'Python',c:'#3776ab',t:'#fff'},sql:{n:'SQL',c:'#00758f',t:'#fff'},web:{n:'HTML/CSS',c:'#e34f26',t:'#fff'}};
 const CH=CQ.challenges,CHXP={1:30,2:50,3:80};
 const T={
-fr:{changeLang:'Changer de langage',lockedT:'Langage verrouillé',lockedD:'Pour le débloquer :',reqL:(n,l)=>`Termine ${n} leçon${n>1?'s':''} de ${l}`,reqLv:n=>`Atteins le niveau ${n}`,goReq:l=>`Aller à ${l}`,unlockT:'Nouveau langage débloqué : ',unlockD:'Il t\'attend dans la liste des langages.',grp:{start:'Pour débuter',web:'Web',data:'Données',soft:'Logiciel et systèmes',mobile:'Mobile',tools:'Outils'},learn:'Apprendre',cont2:'Continuer',startC:'Commencer',allDone:'Langage terminé',next:'À suivre',yourStats:'Ton avancée',seeProf:'Voir mon profil',profile:'Profil',close:'Fermer',revNone:'Rien à revoir',langs:'Langages',lab:'Atelier',review:'Révisions',prof:'Prof IA',install:'Installer sur mon PC',
+fr:{codeT:'À toi de coder',codeTag:'Écris le code',runC:'Vérifier mon code',codeOk:'Ça marche, bien joué !',codeBad:'Pas encore, corrige et réessaie.',codeSolSeen:'Solution affichée : pas d\'XP pour cet exercice, mais tu dois quand même le faire marcher.',codeKeys:'Ctrl + Entrée pour vérifier · Tab pour indenter',outExp:'Sortie attendue',outGot:'Ta sortie',noOut:'(rien)',jsonBad:'Ce n\'est pas du JSON valide : ',jsonKey:k=>`La clé "${k}" avec la bonne valeur`,pyFallback:'Python n\'a pas pu se charger : vérification du code à la place.',changeLang:'Changer de langage',lockedT:'Langage verrouillé',lockedD:'Pour le débloquer :',reqL:(n,l)=>`Termine ${n} leçon${n>1?'s':''} de ${l}`,reqLv:n=>`Atteins le niveau ${n}`,goReq:l=>`Aller à ${l}`,unlockT:'Nouveau langage débloqué : ',unlockD:'Il t\'attend dans la liste des langages.',grp:{start:'Pour débuter',web:'Web',data:'Données',soft:'Logiciel et systèmes',mobile:'Mobile',tools:'Outils'},learn:'Apprendre',cont2:'Continuer',startC:'Commencer',allDone:'Langage terminé',next:'À suivre',yourStats:'Ton avancée',seeProf:'Voir mon profil',profile:'Profil',close:'Fermer',revNone:'Rien à revoir',langs:'Langages',lab:'Atelier',review:'Révisions',prof:'Prof IA',install:'Installer sur mon PC',
  lessonsDone:(n,t)=>`${n} leçon${n>1?'s':''} sur ${t} terminée${n>1?'s':''}`,lesson:'Leçon',locked:'Termine la leçon précédente',replay:'rejouer',ex:'exercices',
  start:'Commencer',check:'Valider',cont:'Continuer',finish:'Terminer',keys:'Touches 1–4 pour choisir · Entrée pour valider · Échap pour quitter',
  good:'Bien joué !',bad:'Pas tout à fait.',answer:' Réponse : ',explain:'Explique-moi (Prof IA)',exercise:'Exercice',
@@ -334,7 +337,7 @@ fr:{changeLang:'Changer de langage',lockedT:'Langage verrouillé',lockedD:'Pour 
  passAll:'Tous les tests passent. Défi réussi !',passXp:x=>` +${x} XP`,fail:(p,t)=>`${p} / ${t} tests réussis. Corrige et réessaie !`,ban:w=>`Interdit d'utiliser ${w} pour ce défi.`,
  table:'Voir la table games',rows:'Ton résultat',noRows:'Aucune ligne.',sqlOk:'Résultat correct. Défi réussi !',sqlBad:'Le résultat ne correspond pas à ce qui est demandé.',
  preview:'Aperçu',checks:'Vérifications',engine:'Langage',sbxRun:'Code exécuté.'},
-en:{changeLang:'Change language',lockedT:'Language locked',lockedD:'To unlock it:',reqL:(n,l)=>`Finish ${n} ${l} lesson${n>1?'s':''}`,reqLv:n=>`Reach level ${n}`,goReq:l=>`Go to ${l}`,unlockT:'New language unlocked: ',unlockD:'It\'s waiting in the language list.',grp:{start:'Getting started',web:'Web',data:'Data',soft:'Software and systems',mobile:'Mobile',tools:'Tools'},learn:'Learn',cont2:'Continue',startC:'Start',allDone:'Language complete',next:'Up next',yourStats:'Your progress',seeProf:'See my profile',profile:'Profile',close:'Close',revNone:'Nothing to review',langs:'Languages',lab:'Workshop',review:'Review',prof:'AI tutor',install:'Install on my PC',
+en:{codeT:'Your turn to code',codeTag:'Write the code',runC:'Check my code',codeOk:'It works, well done!',codeBad:'Not yet, fix it and try again.',codeSolSeen:'Solution shown: no XP for this exercise, but you still have to make it work.',codeKeys:'Ctrl + Enter to check · Tab to indent',outExp:'Expected output',outGot:'Your output',noOut:'(nothing)',jsonBad:'This isn\'t valid JSON: ',jsonKey:k=>`The "${k}" key with the right value`,pyFallback:'Python couldn\'t load: checking the code instead.',changeLang:'Change language',lockedT:'Language locked',lockedD:'To unlock it:',reqL:(n,l)=>`Finish ${n} ${l} lesson${n>1?'s':''}`,reqLv:n=>`Reach level ${n}`,goReq:l=>`Go to ${l}`,unlockT:'New language unlocked: ',unlockD:'It\'s waiting in the language list.',grp:{start:'Getting started',web:'Web',data:'Data',soft:'Software and systems',mobile:'Mobile',tools:'Tools'},learn:'Learn',cont2:'Continue',startC:'Start',allDone:'Language complete',next:'Up next',yourStats:'Your progress',seeProf:'See my profile',profile:'Profile',close:'Close',revNone:'Nothing to review',langs:'Languages',lab:'Workshop',review:'Review',prof:'AI tutor',install:'Install on my PC',
  lessonsDone:(n,t)=>`${n} of ${t} lesson${t>1?'s':''} completed`,lesson:'Lesson',locked:'Finish the previous lesson',replay:'replay',ex:'exercises',
  start:'Start',check:'Check',cont:'Continue',finish:'Finish',keys:'Keys 1–4 to choose · Enter to check · Esc to quit',
  good:'Nice one!',bad:'Not quite.',answer:' Answer: ',explain:'Explain it to me (AI tutor)',exercise:'Exercise',
@@ -387,9 +390,9 @@ const A=[
 // ================= ÉTAT =================
 let installOk=false;
 const KEY='codequest-v1';
-const VERSION='1.5.2';
-const NEWS={fr:['Les nouveautés s\'affichent ici, à droite, au lieu du profil.','Halo de survol plus net : liseré de verre fin et dégradé, anneau précis autour, légère élévation.','Sur iPhone, plus de flou en haut et en bas : les barres sont presque opaques et bien nettes.'],
- en:['What\'s new now shows here on the right instead of in your profile.','Sharper hover halo: thin gradient glass rim, a precise outer ring and a slight lift.','On iPhone, no more blur at the top and bottom: the bars are near-opaque and crisp.']};
+const VERSION='1.6.0';
+const NEWS={fr:['Chaque leçon se termine maintenant par un exercice où tu écris le code toi-même (80 exercices, un par leçon).','Ton code est vraiment exécuté (JavaScript, Python, SQL, HTML/CSS) ou vérifié ligne par ligne pour les autres langages.','Après 2 essais ratés, tu peux voir la solution (sans XP pour l\'exercice). Un exercice de code réussi rapporte +15 XP.'],
+ en:['Every lesson now ends with an exercise where you write the code yourself (80 exercises, one per lesson).','Your code really runs (JavaScript, Python, SQL, HTML/CSS) or is checked line by line for the other languages.','After 2 failed tries you can see the solution (no XP for that exercise). A passed code exercise is worth +15 XP.']};
 const fresh=()=>({unl:{},fold:{},langOpen:false,theme:'auto',seenV:'',xp:0,done:{},lessons:0,perfect:0,tried:{},streak:0,last:'',ach:{},night:false,early:false,cur:'py',ui:'fr',view:'path',ch:{},drafts:{},rev:{},revOk:0,asked:0,eng:{}});
 let S=fresh();
 const fixView=()=>{if(!['path','lab','review'].includes(S.view))S.view='path'};
@@ -501,7 +504,8 @@ const render=()=>{renderSide();renderMain();renderProfile()};
 let R=null;
 function openRun(o){R=Object.assign({step:o.theory?-1:0,err:0,xp:0,sel:null,checked:false},o);$('lesson').classList.add('on');$('lfoot').className='lfoot';$('fb').innerHTML='';$('lbar').style.width='0%';if(!o.loading)showStep()}
 function startLesson(i){if(!isOpen(S.cur))return;const m=M.find(x=>x.id===S.cur),ls=C()[m.id].ls[i];
- openRun({mode:'lesson',li:i,lang:m.id,title:L(m.n)+' · '+t().lesson+' '+(i+1),theory:ls,qs:ls.q.map((q,j)=>({q,key:m.id+'|'+i+'|'+j}))})}
+ const qs=ls.q.map((q,j)=>({q,key:m.id+'|'+i+'|'+j}));const cx=CQ.code&&CQ.code[m.id+'-'+i];if(cx)qs.push({q:Object.assign({t:'c'},cx),key:null});
+ openRun({mode:'lesson',li:i,lang:m.id,title:L(m.n)+' · '+t().lesson+' '+(i+1),theory:ls,qs})}
 function startReview(){const ks=dueKeys().sort(()=>Math.random()-.5).slice(0,10);if(!ks.length)return;
  openRun({mode:'review',title:t().revT,qs:ks.map(k=>({q:getQ(k),key:k}))})}
 function showStep(){
@@ -514,6 +518,12 @@ function showStep(){
   go.textContent=tt.start;go.disabled=false;go.focus();return}
  const q=qs[step].q;
  let h=`<span class="tag">${esc(R.title)} · ${tt.exercise} ${step+1} / ${tot}</span><h2>${esc(q.p)}</h2>`;
+ if(q.t==='c'){R.cfail=0;R.csol=false;
+  h=`<span class="tag">${esc(R.title)} · ${tt.codeTag} · ${step+1} / ${tot}</span><h2>${esc(L(q.p))}</h2>
+  <textarea class="code cstep" id="ccode" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Code">${esc(S.drafts['L|'+R.lang+'-'+R.li]??L(q.s)??'')}</textarea>
+  <div class="cres" id="cres" aria-live="polite"></div>`;
+  $('lbody').innerHTML=h;$('lbody').scrollTop=0;go.textContent=tt.runC;go.disabled=false;$('fb').innerHTML='<span class="hint">'+tt.codeKeys+'</span>';
+  const ta=$('ccode');ta.focus();ta.setSelectionRange(ta.value.length,ta.value.length);return}
  if(q.t==='f')h+=`<pre><code>${esc(q.c)}</code></pre><input class="fill" id="fill" autocomplete="off" spellcheck="false" autocapitalize="off" aria-label="${esc(q.p)}">`;
  else{if(q.c)h+=`<pre><code>${esc(q.c)}</code></pre>`;h+=`<div class="opts">${q.o.map((o,j)=>`<button class="opt hv" data-o="${j}"><kbd>${j+1}</kbd><code>${esc(o)}</code></button>`).join('')}</div>`}
  $('lbody').innerHTML=h;$('lbody').scrollTop=0;go.textContent=tt.check;go.disabled=true;
@@ -523,6 +533,7 @@ function pick(j){if(!R||R.checked||R.step<0||R.step==='end'||!R.qs[R.step])retur
 const norm=s=>String(s).trim().toLowerCase().replace(/\s+/g,'');
 function check(){
  const tt=t(),{q,key}=R.qs[R.step];let ok,given;
+ if(q.t==='c'){checkCode(q);return}
  if(q.t==='f'){const f=$('fill');given=f.value;ok=q.a.some(a=>norm(a)===norm(f.value));f.classList.add(ok?'good':'wrong');f.disabled=true}
  else{given=q.o[R.sel];ok=R.sel===q.a;document.querySelectorAll('.opt').forEach(b=>{const j=+b.dataset.o;if(j===q.a)b.classList.add('good');else if(j===R.sel)b.classList.add('wrong')})}
  if(ok){R.xp+=R.mode==='lesson'?10:5}else R.err++;
@@ -536,6 +547,57 @@ function check(){
  $('fb').innerHTML=`<b>${ok?tt.good:tt.bad}</b>${esc(q.e)}${ok?'':esc(tt.answer+right)}`;
  R.lastWrong={q,given,right};
  $('go').textContent=R.step===R.qs.length-1?tt.finish:tt.cont;$('go').disabled=false;$('go').focus();
+}
+async function checkCode(q){
+ const tt=t(),code=$('ccode').value,go=$('go'),box=$('cres');if(R.cbusy)return;R.cbusy=true;go.disabled=true;
+ S.drafts['L|'+R.lang+'-'+R.li]=code;save();
+ const rows=[];let pre='',ok=false,engineOk=true;
+ const rx=()=>{for(const r of q.rx||[])rows.push({ok:new RegExp(r.re,r.f).test(code),m:L(r.m)});for(const r of q.no||[])rows.push({ok:!new RegExp(r.re,r.f).test(code),m:L(r.m)})};
+ const outCmp=(logs)=>{const got=(logs||[]).join('\n').replace(/[ \t]+$/gm,'').trim(),exp=String(L(q.out)).trim();rows.push({ok:got===exp,m:`${tt.outExp} : <code>${esc(exp)}</code><br>${tt.outGot} : <code>${esc(got||tt.noOut)}</code>`,raw:1})};
+ try{
+  if(q.k==='js'||q.k==='py'){
+   if(q.k==='py'&&!pyP)box.innerHTML=`<p class="note">${tt.loadPy}</p>`;
+   let r;try{r=q.k==='js'?await runJS(code,q.fn,q.cases):await runPy(code,q.fn,q.cases)}catch(e){r=null}
+   if(!r&&q.k==='py'){engineOk=false;pre=`<p class="note">${tt.pyFallback}</p>`;rx()}
+   else if(r.error){rows.push({ok:false,m:`<code style="white-space:pre-wrap">${esc(r.error)}</code>`,raw:1})}
+   else if(r.nofn){rows.push({ok:false,m:esc(tt.noFn(q.fn)),raw:1})}
+   else{if(q.fn)r.res.forEach((x,i)=>{const [args,e]=q.cases[i];let good,got;
+     if(q.k==='js'){got=x.err||x.v;good=!x.err&&x.v!=='undefined'&&JSON.stringify(nz(JSON.parse(x.v)))===JSON.stringify(nz(e))}else{got=x.err||x.v;good=x.ok}
+     rows.push({ok:good,m:`<code>${esc(q.fn+'('+args.map(a=>q.k==='py'?pyLit(a):JSON.stringify(a)).join(', ')+')')}</code> → ${tt.exp} <code>${esc(q.k==='py'?pyLit(e):JSON.stringify(e))}</code>${good?'':`, ${tt.got} <code>${esc(got)}</code>`}`,raw:1})});
+    else outCmp(r.logs);
+    rx();
+    if(r.logs&&r.logs.length&&q.fn)pre+=`<pre class="logs">${esc(r.logs.join('\n'))}</pre>`}
+  }else if(q.k==='sql'){
+   box.innerHTML=`<p class="note">${tt.loadSql}</p>`;const a=await loadSql();
+   const run=x=>{const db=new a.Database();db.exec(CQ.sqlSetup);let r=db.exec(x);if(Array.isArray(r)&&r.length&&Array.isArray(r[r.length-1]))r=r[r.length-1];return r};
+   let got,err=null;try{got=run(code)}catch(e){err=String(e.message||e)}
+   if(err)rows.push({ok:false,m:`<code style="white-space:pre-wrap">${esc(err)}</code>`,raw:1});
+   else{const exp=run(q.sol);let A1=rowKey(got),B1=rowKey(exp);if(!q.ord){A1=[...A1].sort();B1=[...B1].sort()}
+    const g=Array.isArray(got)&&JSON.stringify(A1)===JSON.stringify(B1);rows.push({ok:g,m:g?tt.sqlOk:tt.sqlBad});pre=`<div class="scroll">${resTable(Array.isArray(got)?got:[])}</div>`}
+  }else if(q.k==='web'){
+   pre=`<h4>${tt.preview}</h4><div class="pv" id="cpv"></div>`;box.innerHTML=pre;
+   const root=$('cpv').attachShadow({mode:'open'});root.innerHTML=code;
+   for(const c of q.checks){let g=false;try{const els=[...root.querySelectorAll(c.s)];
+     if(c.n!==undefined&&c.css===undefined&&c.attr===undefined&&!c.txt)g=c.n===0?els.length===0:els.length>=c.n;
+     else{const e=els[0];g=!!e;
+      if(g&&c.txt)g=e.textContent.trim().length>0;
+      if(g&&c.attr)g=new RegExp(c.re).test(e.getAttribute(c.attr)||'');
+      if(g&&c.css){const v=getComputedStyle(e)[c.css];g=c.min!==undefined?parseFloat(v)>=c.min:v===c.v}}}catch(e){g=false}
+    rows.push({ok:g,m:L(c.m)})}
+  }else if(q.k==='json'){
+   let o=null;try{o=JSON.parse(code)}catch(e){rows.push({ok:false,m:esc(tt.jsonBad+e.message),raw:1})}
+   if(o)for(const [k,v] of Object.entries(q.keys))rows.push({ok:o[k]===v,m:tt.jsonKey(k)});
+  }else rx();
+ }catch(e){rows.push({ok:false,m:esc(tt.engFail),raw:1})}
+ ok=rows.length>0&&rows.every(x=>x.ok);
+ box.innerHTML=(q.k==='web'?pre:'')+`<div class="banner ${ok?'y':'n'}">${ok?tt.codeOk:tt.codeBad}</div>`+(rows.length?`<h4>${tt.checks}</h4>`+rows.map(x=>`<div class="trow"><i class="${x.ok?'y':'n'}">${x.ok?'✓':'✗'}</i><div>${x.raw?x.m:esc(x.m)}</div></div>`).join(''):'')+(q.k!=='web'?pre:'')+(R.csol?`<h4>${t().solT}</h4><pre class="logs">${esc(L(q.sol))}</pre>`:'');
+ if(q.k==='web'&&$('cpv')&&!$('cpv').shadowRoot){const r2=$('cpv').attachShadow({mode:'open'});r2.innerHTML=code}
+ R.cbusy=false;go.disabled=false;
+ if(ok){R.checked=true;if(!R.csol)R.xp+=R.mode==='lesson'?15:5;else R.err++;$('lxp').textContent='+'+R.xp+' XP';
+  $('lfoot').className='lfoot good';$('fb').innerHTML=`<b>${tt.codeOk}</b>${R.csol?esc(tt.codeSolSeen):''}`;
+  go.textContent=R.step===R.qs.length-1?tt.finish:tt.cont;go.focus()}
+ else{R.cfail++;$('lfoot').className='lfoot wrong';
+  $('fb').innerHTML=`<b>${tt.codeBad}</b>${R.cfail>=2&&!R.csol?`<button class="btn" id="csolBtn">${tt.sol}</button>`:''}`;go.textContent=tt.runC}
 }
 function bumpDay(){const td=day();if(S.last!==td){S.streak=S.last===day(-1)?S.streak+1:1;S.last=td}const h=new Date().getHours();if(h>=23)S.night=true;if(h<8)S.early=true}
 function award(){const news=A.filter(a=>!S.ach[a.id]&&a.f(S));news.forEach(a=>S.ach[a.id]=Date.now());news.forEach((a,j)=>setTimeout(()=>toast(a),500+j*2600));
@@ -698,9 +760,16 @@ $('lbody').addEventListener('click',e=>{const o=e.target.closest('.opt');if(o)pi
  const c=e.target.closest('[data-cp]');if(c&&R&&R.theory){navigator.clipboard?.writeText(R.theory.ex).then(()=>{c.textContent='✓'},()=>{})}});
 $('scrim').addEventListener('click',()=>openProf(false));
 document.addEventListener('keydown',e=>{if(!R&&e.key==='Escape'&&$('prof').classList.contains('on'))openProf(false)});
+$('lfoot').addEventListener('click',e=>{if(e.target.id==='csolBtn'&&R){R.csol=true;const q=R.qs[R.step].q;e.target.remove();$('fb').insertAdjacentHTML('beforeend',`<span class="hint">${esc(t().codeSolSeen)}</span>`);$('cres').insertAdjacentHTML('beforeend',`<h4>${t().solT}</h4><pre class="logs">${esc(L(q.sol))}</pre>`)}});
+$('lbody').addEventListener('keydown',e=>{if(e.target.id!=='ccode')return;
+ if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();e.stopPropagation();if(!R.checked)checkCode(R.qs[R.step].q);else next();return}
+ if(e.key==='Tab'&&!e.shiftKey){e.preventDefault();const ta=e.target,s=ta.selectionStart;ta.setRangeText(R.qs[R.step].q.k==='py'?'    ':'  ',s,ta.selectionEnd,'end')}
+ if(e.key==='Enter')e.stopPropagation()});
+$('lbody').addEventListener('input',e=>{if(e.target.id==='ccode'&&R&&R.checked){R.checked=false}});
 $('go').addEventListener('click',next);
 $('quit').addEventListener('click',closeRun);
 document.addEventListener('keydown',e=>{if(!R)return;
+ if(e.target&&e.target.id==='ccode'){if(e.key==='Escape'){e.target.blur()}return}
  if(e.key==='Escape'){closeRun();return}
  if(e.key==='Enter'&&!e.target.closest('#go,.cp,#quit')){if(!$('go').disabled){e.preventDefault();next()}return}
  if(/^[1-4]$/.test(e.key)&&document.activeElement.id!=='fill')pick(+e.key-1)});

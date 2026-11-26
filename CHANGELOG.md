@@ -1,5 +1,14 @@
 # Nouveautés de CodeQuest
 
+## 1.6.0 — 26 novembre 2026
+- **Un exercice « écris le code » à la fin de chaque leçon** (80 au total, FR/EN), en plus des questions.
+  - JavaScript et Python : le code est exécuté, avec comparaison de la sortie ou tests de fonction.
+  - SQL : la requête est lancée sur la table `games` et le résultat comparé.
+  - HTML / CSS : aperçu en direct et vérification des éléments et des styles.
+  - TypeScript, Java, C, C++, C#, PHP, Go, Rust, Ruby, Swift, Kotlin, Bash… : vérification des instructions attendues, point par point.
+- Le brouillon de chaque exercice est gardé. Ctrl + Entrée pour vérifier, Tab pour indenter.
+- Après 2 essais ratés, bouton « Voir la solution » (l'exercice ne rapporte alors pas d'XP). Exercice réussi : +15 XP.
+
 ## 1.5.2 — 26 novembre 2026
 - Encadré **Nouveautés** déplacé à droite de l'écran Apprendre (sous les leçons sur écran moyen, en bas sur téléphone).
 - Halo de survol redessiné, plus net : liseré de verre fin en dégradé (blanc en haut, violet en bas), anneau extérieur précis de 4 px, ombre courte et légère élévation des cartes.
