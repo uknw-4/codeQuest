@@ -8,21 +8,11 @@ Une appli gratuite pour apprendre à coder, en français et en anglais.
 - **Atelier** : 45 défis où l'on écrit du vrai code (JavaScript, Python, SQL, HTML/CSS), vérifié automatiquement par des tests, plus un bac à sable
 - **Révisions espacées** : les questions ratées reviennent au bon moment
 - **Progression** : XP, niveaux, séries de jours, 25 succès
-- Installable sur PC et utilisable hors ligne (sauf le premier chargement de Python)
+- Installable sur PC (`CodeQuest.exe`) et sur iPhone / iPad (depuis Safari : Partager → Sur l'écran d'accueil), utilisable hors ligne (sauf le premier chargement de Python)
 
 Aucun serveur, aucune base de données : ta progression reste dans ton navigateur.
 
 ---
-
-## Tester sur ton PC sans GitHub
-
-L'installation et le mode hors ligne ont besoin d'une vraie adresse web. Pour tester en local :
-
-```bash
-python -m http.server 8000
-```
-
-puis ouvre `http://localhost:8000`.
 
 ## Structure
 
@@ -31,7 +21,10 @@ index.html            l'appli (interface, logique, exécution du code)
 content/fr.js         leçons en français
 content/fr-extra.js   leçons supplémentaires + Algorithmique (FR)
 content/en.js         toutes les leçons en anglais
+content/frontback.js  parcours Front-end et Back-end (FR/EN)
 content/challenges.js défis de l'Atelier (FR/EN) avec leurs tests
+content/challenges-plus.js  défis Front-end / Back-end
+desktop/              lanceur et réglages de CodeQuest.exe
 sw.js                 mode hors ligne
 manifest.webmanifest  installation comme application
 ```

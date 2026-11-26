@@ -1,10 +1,10 @@
 // Service worker : l'appli marche hors ligne et s'installe comme un logiciel.
 // Réseau d'abord (pour recevoir les mises à jour), cache en secours.
-const CACHE = 'codequest-v7';
+const CACHE = 'codequest-v8';
 const FILES = [
   './', './index.html', './manifest.webmanifest',
   './content/fr.js', './content/fr-extra.js', './content/en.js', './content/frontback.js', './content/challenges.js', './content/challenges-plus.js',
-  './icons/icon-192.png', './icons/icon-512.png'
+  './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'
 ];
 
 self.addEventListener('install', e => {

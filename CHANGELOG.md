@@ -1,5 +1,10 @@
 # Nouveautés de CodeQuest
 
+## 1.4.0 — 26 novembre 2026
+- **Look en verre translucide**, façon Apple : fond coloré flou, panneaux en verre dépoli, barre du haut, profil et leçons transparents. En thème clair comme en sombre.
+- **iPhone et iPad** : CodeQuest s'installe depuis Safari (Partager → Sur l'écran d'accueil) et s'ouvre en plein écran comme une appli, avec sa propre icône.
+- Prise en compte de l'encoche et de la barre du bas des iPhone.
+
 ## 1.3.0 — 26 novembre 2026
 - **Parcours Front-end** (8 leçons) : rôle du front, DOM, événements, formulaires, responsive, accessibilité, fetch, frameworks.
 - **Parcours Back-end** (8 leçons) : client/serveur, HTTP, API REST et JSON, Node.js/Express, bases de données, sécurité, secrets et mise en ligne, Python avec Flask.
