@@ -314,8 +314,8 @@ const A=[
 // ================= ÉTAT =================
 let installOk=false;
 const KEY='codequest-v1';
-const VERSION='1.1.0';
-const fresh=()=>({theme:'auto',xp:0,done:{},lessons:0,perfect:0,tried:{},streak:0,last:'',ach:{},night:false,early:false,cur:'py',ui:'fr',view:'path',ch:{},drafts:{},rev:{},revOk:0,asked:0,eng:{}});
+const VERSION='1.2.0';
+const fresh=()=>({theme:'auto',seenV:'',xp:0,done:{},lessons:0,perfect:0,tried:{},streak:0,last:'',ach:{},night:false,early:false,cur:'py',ui:'fr',view:'path',ch:{},drafts:{},rev:{},revOk:0,asked:0,eng:{}});
 let S=fresh();
 const fixView=()=>{if(!['path','lab','review'].includes(S.view))S.view='path'};
 try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(fresh(),JSON.parse(r))}catch(e){}
@@ -624,11 +624,13 @@ function applyTheme(){const r=document.documentElement;if(S.theme==='auto')delet
 function setTheme(v){S.theme=v;save();applyTheme();renderSide();renderProfile()}
 matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>{if(S.theme==='auto'){applyTheme();renderSide()}});
 fixView();applyTheme();render();
+if(S.seenV&&S.seenV!==VERSION){setTimeout(()=>{$('tt').textContent=(S.ui==='fr'?'Mise à jour : CodeQuest ':'Updated: CodeQuest ')+VERSION;$('td').textContent=S.ui==='fr'?'Les nouveautés sont dans le CHANGELOG sur GitHub.':'See the CHANGELOG on GitHub for what\'s new.';$('toast').classList.add('on');setTimeout(()=>$('toast').classList.remove('on'),5000)},800)}
+if(S.seenV!==VERSION){S.seenV=VERSION;save()}
 // ================= APPLI INSTALLABLE (PWA) =================
 let installEvt=null;
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;installOk=true;const b=$('install');if(b)b.hidden=false});
 document.addEventListener('click',e=>{if(e.target.id==='install'&&installEvt){installEvt.prompt();installEvt.userChoice.finally(()=>{installEvt=null;installOk=false;renderProfile()})}});
-if('serviceWorker' in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('sw.js').catch(()=>{});
+if('serviceWorker' in navigator&&location.protocol!=='file:'&&!window.CQ_DESKTOP)navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
 </script>
 </body>

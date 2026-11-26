@@ -1,6 +1,6 @@
 {
   "applicationId": "io.github.uknw4.codequest",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "defaultMode": "window",
   "port": 52741,
   "documentRoot": "/resources/",

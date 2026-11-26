@@ -46,8 +46,8 @@ JavaScript sans framework · [Pyodide](https://pyodide.org) (Python dans le navi
 
 ## Version PC (.exe)
 
-`CodeQuest.exe` est une vraie appli Windows (fenêtre à part, icône, pas besoin de navigateur ni d'installation). Elle est construite avec [Neutralinojs](https://neutralino.js.org) : le fichier de réglages est dans `desktop/neutralino.config.json`.
+`CodeQuest.exe` est une vraie appli Windows (fenêtre à part, icône, pas besoin de navigateur ni d'installation). Elle se met à jour toute seule : à chaque démarrage avec internet, elle charge la dernière version de ce dépôt (`desktop/loader.html`). Elle est construite avec [Neutralinojs](https://neutralino.js.org) : le fichier de réglages est dans `desktop/neutralino.config.json`.
 
-Pour la reconstruire : copie `index.html`, `sw.js`, `manifest.webmanifest`, `content/` et `icons/` dans un dossier `resources/` à côté de ce fichier, puis lance `npx @neutralinojs/neu update` et `npx @neutralinojs/neu build --release --embed-resources`.
+Pour reconstruire le `.exe` (seulement si `desktop/` change) : dans un dossier `resources/` à côté de `neutralino.config.json`, mets `desktop/loader.html` renommé en `index.html`, `index.html` renommé en `app.html` (copie de secours hors ligne), et les dossiers `content/` et `icons/`, puis lance `npx @neutralinojs/neu update` et `npx @neutralinojs/neu build --release --embed-resources`.
 
 Windows 10/11 requis (WebView2, déjà présent sur la plupart des PC).
