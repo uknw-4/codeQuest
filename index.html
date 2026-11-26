@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CodeQuest</title>
+<meta name="description" content="Apprends à coder gratuitement : 18 parcours, défis exécutés pour de vrai, prof IA local.">
+<meta name="theme-color" content="#0e0f12">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE: un coach exigeant mais bienveillant, qui parle simple
+   IDEA: une carte de quête par langage, chaque langage dans ses propres couleurs, plus un atelier où le code tourne pour de vrai
+   PICTURE: le chemin de leçons sur la bande colorée du langage ; dans l'Atelier, l'éditeur et ses résultats de tests
+   COLOUR and TYPE: blanc / nuit, barre latérale noire, couleur du langage en aplat, corail XP + or succès; Sora + Inter + JetBrains Mono
+   LAYOUT: PC à 3 colonnes (navigation | contenu | profil), empilé sous 1100px puis 700px */
+:root{color-scheme:light dark;
+--bg:light-dark(#ffffff,#121316);--ink:light-dark(#15161a,#eef0f3);--mute:light-dark(#5d6069,#a3a7b0);
+--card:light-dark(#f2f3f5,#1c1e23);--line:light-dark(#e1e3e8,#2a2d34);
+--side:#0e0f12;--sideink:#e9eaee;--xp:#ff5a36;--gold:#ffc531;--ok:#1a9e60;--bad:#e5484d;--lc:#3776ab;--lt:#fff}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:Sora,Inter,sans-serif;line-height:1.1;margin:0;text-wrap:balance}
+button{font:inherit;cursor:pointer;color:inherit}
+button:focus-visible,input:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+code,pre,.mono,textarea.code{font-family:"JetBrains Mono",ui-monospace,monospace}
+.app{display:grid;grid-template-columns:250px minmax(0,1fr) 320px;min-height:100vh}
+/* sidebar */
+.side{background:var(--side);color:var(--sideink);padding:20px 14px;display:flex;flex-direction:column;gap:4px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.logo{font:700 23px Sora,sans-serif;padding:0 10px 12px;display:flex;align-items:center;gap:10px}
+.logo i{width:30px;height:30px;border-radius:9px;background:var(--xp);display:grid;place-items:center;font-style:normal;font-size:14px;color:#fff}
+.seg{display:flex;background:#1d1f25;border-radius:10px;padding:3px;margin:0 6px 10px}
+.seg button{flex:1;min-height:36px;border:0;border-radius:8px;background:none;color:#a3a7b0;font-weight:600;font-size:14px}
+.seg button[aria-pressed=true]{background:#33363f;color:#fff}
+.side small{color:#8d909a;padding:12px 10px 4px;font-size:13px}
+.nav,.lang{display:flex;align-items:center;gap:10px;width:100%;min-height:44px;padding:6px 10px;border:0;border-radius:10px;background:none;text-align:left}
+.nav:hover,.lang:hover{background:#1d1f25}.nav[aria-current=true],.lang[aria-current=true]{background:#262830}
+.nav svg{flex:none;width:22px;height:22px}
+.nav span,.lang span{flex:1}
+.pill{font:600 12px Inter;background:var(--xp);color:#fff;border-radius:99px;padding:1px 8px}
+.dot{flex:none;width:26px;height:26px;border-radius:7px;display:grid;place-items:center;font:700 11px "JetBrains Mono",monospace}
+.lang b{font:600 12px Inter;color:#8d909a}.lang b.full{color:var(--gold)}
+#install{margin-top:14px;min-height:44px;border:1px solid #33363f;background:none;color:var(--sideink);border-radius:10px}
+/* main */
+main{min-width:0}
+.hero{background:var(--lc);color:var(--lt);padding:clamp(26px,3.6vw,48px) clamp(20px,4vw,52px) 36px}
+.hero h1{font-size:clamp(32px,3.8vw,50px)}
+.hero p{max-width:62ch;margin:10px 0 20px;opacity:.93;font-size:17px}
+.meter{height:12px;border-radius:99px;background:rgba(0,0,0,.22);overflow:hidden;max-width:520px}
+.meter i{display:block;height:100%;background:var(--lt);border-radius:99px;transition:width .5s}
+.hero .mt{font-size:14px;margin-top:8px;opacity:.9}
+.hrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.hbtn{min-height:44px;padding:0 18px;border-radius:12px;border:2px solid currentColor;background:none;color:var(--lt);font-weight:600}
+.hbtn.solid{background:var(--lt);color:var(--lc);border-color:var(--lt)}
+.path{padding:34px clamp(20px,4vw,52px) 70px;max-width:780px}
+.node{display:flex;align-items:center;gap:18px;margin:0 0 24px}
+.node:nth-child(even){margin-left:min(22%,150px)}.node:nth-child(4n+3){margin-left:min(8%,60px)}
+.bub{flex:none;width:74px;height:74px;border-radius:50%;border:0;display:grid;place-items:center;font:700 25px Sora;background:var(--card);color:var(--mute);box-shadow:inset 0 -6px 0 rgba(0,0,0,.12)}
+.node.open .bub{background:var(--lc);color:var(--lt);animation:pulse 2s infinite}
+.node.done .bub{background:var(--gold);color:#3a2a00}
+.node.lock .bub{cursor:not-allowed}
+.node h3{font-size:19px}.node p{margin:2px 0 0;color:var(--mute);font-size:14px}
+.stars{color:#c99400;letter-spacing:2px}
+@keyframes pulse{0%,100%{box-shadow:inset 0 -6px 0 rgba(0,0,0,.15),0 0 0 0 color-mix(in srgb,var(--lc) 50%,transparent)}50%{box-shadow:inset 0 -6px 0 rgba(0,0,0,.15),0 0 0 12px transparent}}
+.wrap{padding:28px clamp(20px,4vw,52px) 60px}
+/* lab */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.tab{min-height:40px;padding:0 16px;border-radius:99px;border:1px solid var(--line);background:var(--bg);font-weight:600;font-size:14px}
+.tab[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.cc{text-align:left;border:0;border-radius:16px;background:var(--card);padding:16px;min-height:120px;display:flex;flex-direction:column;gap:8px;position:relative}
+.cc:hover{outline:2px solid var(--line)}
+.cc h3{font-size:17px}.cc .meta{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--mute);margin-top:auto}
+.eng{display:inline-flex;align-self:flex-start;font:700 12px "JetBrains Mono",monospace;border-radius:6px;padding:2px 8px}
+.lvd{letter-spacing:3px;color:var(--xp)}
+.cc.ok::after{content:"✓";position:absolute;top:12px;right:14px;width:26px;height:26px;border-radius:50%;background:var(--ok);color:#fff;display:grid;place-items:center;font-weight:700}
+.sbx{background:var(--side);color:#fff}.sbx .meta{color:#a3a7b0}
+.lh{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.back{min-height:40px;padding:0 14px;border-radius:10px;border:1px solid var(--line);background:var(--bg)}
+.desc{font-size:17px;max-width:72ch;margin:0 0 14px}
+textarea.code{width:100%;min-height:280px;resize:vertical;background:#0f1117;color:#e6e8ee;border:0;border-radius:14px;padding:16px 18px;font-size:15px;line-height:1.6;tab-size:4;white-space:pre;overflow:auto}
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.btn{min-height:46px;padding:0 18px;border-radius:12px;border:1px solid var(--line);background:var(--bg);font-weight:600}
+.btn.pri{background:var(--lc);color:var(--lt);border:0;box-shadow:inset 0 -4px 0 rgba(0,0,0,.2);padding:0 24px}
+.btn:disabled{opacity:.45;cursor:default}
+.out{border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-top:4px}
+.out:empty{display:none}
+.out h4{margin:0 0 8px;font:600 14px Inter;color:var(--mute)}
+.trow{display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px;padding:8px 0;border-top:1px solid var(--line);font-size:14px}
+.trow:first-of-type{border-top:0}
+.trow i{font-style:normal;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px}
+.trow i.y{background:var(--ok)}.trow i.n{background:var(--bad)}
+.trow code{font-size:13.5px}
+.logs{background:#0f1117;color:#d7dae2;border-radius:10px;padding:10px 12px;font-size:13.5px;white-space:pre-wrap;margin:8px 0 0;max-height:220px;overflow:auto}
+.banner{border-radius:12px;padding:12px 14px;font-weight:600;margin-bottom:10px}
+.banner.y{background:color-mix(in srgb,var(--ok) 16%,var(--bg))}.banner.n{background:color-mix(in srgb,var(--bad) 13%,var(--bg))}
+.pv{border:1px dashed var(--line);border-radius:10px;padding:12px;background:#fff;color:#111;margin:8px 0}
+table.res{border-collapse:collapse;font-size:14px;margin-top:6px}
+table.res th,table.res td{border:1px solid var(--line);padding:5px 10px;text-align:left}
+table.res td.n{text-align:right}
+.scroll{overflow-x:auto}
+.aibox{margin-top:14px;background:color-mix(in srgb,#7c5cff 10%,var(--bg));border-radius:14px;padding:14px 16px;font-size:15px}
+.aibox:empty{display:none}
+.aibox pre,.msg pre{background:#0f1117;color:#e6e8ee;border-radius:10px;padding:12px 14px;font-size:14px;overflow-x:auto;white-space:pre}
+.aibox code,.msg code{background:color-mix(in srgb,var(--ink) 8%,transparent);border-radius:5px;padding:1px 5px;font-size:.92em}
+.aibox pre code,.msg pre code{background:none;padding:0}
+.note{color:var(--mute);font-size:14px}
+/* profile */
+.prof{border-left:1px solid var(--line);padding:24px 20px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.lvl{display:flex;gap:16px;align-items:center}
+.ring{flex:none;width:84px;height:84px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--xp) var(--p,0%),var(--card) 0)}
+.ring div{width:66px;height:66px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font:700 26px Sora}
+.lvl h2{font-size:22px}.lvl p{margin:2px 0 0;color:var(--mute);font-size:14px}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:18px 0 24px}
+.stat{background:var(--card);border-radius:12px;padding:11px 10px;text-align:center}
+.stat b{display:block;font:700 22px Sora}.stat span{font-size:13px;color:var(--mute)}
+.prof h3{font-size:17px;margin:0 0 12px;display:flex;justify-content:space-between}
+.prof h3 span{font:500 14px Inter;color:var(--mute)}
+.achs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
+.ach{aspect-ratio:1;border-radius:12px;background:var(--card);display:grid;place-items:center;border:0;color:var(--mute)}
+.ach svg{width:26px;height:26px}.ach.on{background:var(--gold);color:#3a2a00}
+.achinfo{margin-top:12px;background:var(--card);border-radius:12px;padding:12px 14px;font-size:14px;min-height:64px}
+.achinfo b{display:block;font-size:15px}
+.reset{margin-top:18px;background:none;border:0;color:var(--mute);font-size:13px;text-decoration:underline;min-height:44px}
+/* lesson overlay */
+.lesson{position:fixed;inset:0;background:var(--bg);z-index:20;display:none;flex-direction:column}
+.lesson.on{display:flex}
+.ltop{display:flex;align-items:center;gap:16px;padding:18px clamp(16px,4vw,48px);max-width:900px;width:100%;margin:0 auto}
+.x{width:44px;height:44px;border-radius:12px;border:0;background:var(--card);font-size:20px}
+.lbar{flex:1;height:14px;border-radius:99px;background:var(--card);overflow:hidden}
+.lbar i{display:block;height:100%;background:var(--lc);border-radius:99px;transition:width .4s}
+.lbody{flex:1;overflow-y:auto;padding:16px clamp(16px,4vw,48px) 40px;max-width:900px;width:100%;margin:0 auto}
+.lbody h2{font-size:clamp(25px,3vw,33px);margin-bottom:14px}
+.tag{display:inline-block;font-size:14px;font-weight:600;color:var(--mute);margin-bottom:8px}
+.theory{font-size:18px;max-width:65ch}
+.lbody pre{background:#0f1117;color:#e6e8ee;border-radius:14px;padding:18px 20px;font-size:16px;line-height:1.6;margin:18px 0;position:relative;white-space:pre;overflow-x:auto}
+.cp{position:absolute;top:10px;right:10px;border:0;border-radius:8px;background:#262a35;color:#c9ccd5;font:500 13px Inter;padding:6px 10px;min-height:32px}
+.opts{display:grid;gap:10px;margin-top:18px}
+.opt{display:flex;gap:14px;align-items:center;text-align:left;min-height:56px;padding:12px 16px;border-radius:14px;border:2px solid var(--line);background:var(--bg);font-size:17px}
+.opt kbd{flex:none;width:28px;height:28px;border-radius:7px;border:1px solid var(--line);display:grid;place-items:center;font:600 13px Inter;color:var(--mute)}
+.opt:hover{border-color:var(--lc)}
+.opt.sel{border-color:var(--lc);background:color-mix(in srgb,var(--lc) 10%,var(--bg))}
+.opt.good{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,var(--bg))}
+.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,var(--bg))}
+.fill{width:100%;max-width:360px;margin-top:16px;font:600 18px "JetBrains Mono",monospace;padding:14px 16px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink)}
+.fill.good{border-color:var(--ok)}.fill.wrong{border-color:var(--bad)}
+.lfoot{border-top:1px solid var(--line);padding:16px clamp(16px,4vw,48px)}
+.lfoot>div{max-width:900px;margin:0 auto;display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.lfoot.good{background:color-mix(in srgb,var(--ok) 14%,var(--bg))}
+.lfoot.wrong{background:color-mix(in srgb,var(--bad) 12%,var(--bg))}
+.fb{flex:1 1 320px;font-size:15px}.fb b{font-size:18px;display:block}
+.fb .btn{margin-top:8px;min-height:38px}
+.go{min-height:52px;padding:0 32px;border-radius:14px;border:0;background:var(--lc);color:var(--lt);font:700 17px Sora;box-shadow:inset 0 -4px 0 rgba(0,0,0,.2)}
+.go:disabled{opacity:.4;cursor:default}
+.hint{font-size:13px;color:var(--mute)}
+.end{text-align:center;padding-top:6vh}
+.end .big{font:700 clamp(58px,9vw,94px) Sora;color:var(--xp);line-height:1}
+.newa{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:22px}
+.newa div{background:var(--gold);color:#3a2a00;border-radius:12px;padding:10px 14px;font-weight:600}
+.toast{position:fixed;right:20px;bottom:20px;z-index:40;background:var(--side);color:#fff;border-radius:14px;padding:14px 18px;display:flex;gap:12px;align-items:center;box-shadow:0 10px 30px rgba(0,0,0,.3);transform:translateY(160%);transition:transform .35s;max-width:calc(100vw - 40px)}
+.toast.on{transform:none}.toast i{flex:none;width:36px;height:36px;border-radius:10px;background:var(--gold);color:#3a2a00;display:grid;place-items:center;font-style:normal}
+@media(max-width:1100px){.app{grid-template-columns:230px minmax(0,1fr)}.prof{grid-column:1/-1;position:static;height:auto;border-left:0;border-top:1px solid var(--line)}}
+@media(max-width:700px){.app{grid-template-columns:minmax(0,1fr)}.side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;overflow-x:auto;padding:12px}.side small,.logo,#install{display:none}.seg{margin:0}.nav,.lang{flex:none;width:auto}.lang b{display:none}.node:nth-child(n){margin-left:0}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <nav class="side" id="side" aria-label="Navigation"></nav>
+  <main id="main"></main>
+  <aside class="prof" id="prof"></aside>
+</div>
+<div class="lesson" id="lesson" role="dialog" aria-modal="true">
+  <div class="ltop"><button class="x" id="quit" aria-label="Quitter">✕</button><div class="lbar"><i id="lbar"></i></div><span class="hint mono" id="lxp"></span></div>
+  <div class="lbody" id="lbody"></div>
+  <div class="lfoot" id="lfoot"><div><div class="fb" id="fb"></div><button class="go" id="go"></button></div></div>
+</div>
+<div class="toast" id="toast" role="status"><i>★</i><div><b id="tt"></b><div id="td" style="color:#b9bcc5;font-size:13px"></div></div></div>
+
+<script src="content/fr.js"></script>
+<script src="content/fr-extra.js"></script>
+<script src="content/en.js"></script>
+<script src="content/challenges.js"></script>
+<script>
+{
+// ================= DONNÉES DE BASE =================
+const M=[
+ {id:'py',n:'Python',ab:'Py',c:'#3776ab',t:'#fff'},{id:'js',n:'JavaScript',ab:'JS',c:'#f0c419',t:'#1b1b1b'},
+ {id:'html',n:'HTML',ab:'<>',c:'#e34f26',t:'#fff'},{id:'css',n:'CSS',ab:'{}',c:'#2965f1',t:'#fff'},
+ {id:'sql',n:'SQL',ab:'DB',c:'#00758f',t:'#fff'},{id:'algo',n:{fr:'Algorithmique',en:'Algorithms'},ab:'f(x)',c:'#d6336c',t:'#fff'},
+ {id:'ts',n:'TypeScript',ab:'TS',c:'#3178c6',t:'#fff'},{id:'java',n:'Java',ab:'J',c:'#b07219',t:'#fff'},
+ {id:'c',n:'C',ab:'C',c:'#5c6bc0',t:'#fff'},{id:'cpp',n:'C++',ab:'C++',c:'#00599c',t:'#fff'},
+ {id:'cs',n:'C#',ab:'C#',c:'#68217a',t:'#fff'},{id:'php',n:'PHP',ab:'php',c:'#777bb4',t:'#fff'},
+ {id:'go',n:'Go',ab:'Go',c:'#00add8',t:'#06232b'},{id:'rs',n:'Rust',ab:'Rs',c:'#b7410e',t:'#fff'},
+ {id:'rb',n:'Ruby',ab:'Rb',c:'#cc342d',t:'#fff'},{id:'sw',n:'Swift',ab:'Sw',c:'#f05138',t:'#fff'},
+ {id:'kt',n:'Kotlin',ab:'Kt',c:'#7f52ff',t:'#fff'},{id:'sh',n:'Bash',ab:'$_',c:'#3a3f47',t:'#fff'}];
+const ENG={js:{n:'JavaScript',c:'#f0c419',t:'#1b1b1b'},py:{n:'Python',c:'#3776ab',t:'#fff'},sql:{n:'SQL',c:'#00758f',t:'#fff'},web:{n:'HTML/CSS',c:'#e34f26',t:'#fff'}};
+const CH=CQ.challenges,CHXP={1:30,2:50,3:80};
+const T={
+fr:{langs:'Langages',lab:'Atelier',review:'Révisions',prof:'Prof IA',install:'Installer sur mon PC',
+ lessonsDone:(n,t)=>`${n} leçon${n>1?'s':''} sur ${t} terminée${n>1?'s':''}`,lesson:'Leçon',locked:'Termine la leçon précédente',replay:'rejouer',ex:'exercices',
+ start:'Commencer',check:'Valider',cont:'Continuer',finish:'Terminer',keys:'Touches 1–4 pour choisir · Entrée pour valider · Échap pour quitter',
+ good:'Bien joué !',bad:'Pas tout à fait.',answer:' Réponse : ',explain:'Explique-moi (Prof IA)',exercise:'Exercice',
+ doneT:'Leçon terminée !',perfT:'Sans faute, bravo !',goodOf:(g,t)=>`${g} / ${t} bonnes réponses`,bonus:' · bonus +20 XP',half:' · rejouée : XP divisée par 2',streak:n=>` · série : ${n} jour${n>1?'s':''}`,
+ titles:['Débutant','Apprenti','Codeur','Développeur','Expert','Hacker','Architecte','Légende'],
+ xpLine:(x,r,n)=>`${x} XP · encore ${r} XP pour le niveau ${n}`,stS:'jours de série',stL:'leçons',stC:'défis réussis',stR:'à réviser',
+ ach:'Succès',achHint:'Clique sur un badge pour voir comment le débloquer.',unl:' · débloqué',reset:'Réinitialiser ma progression',resetC:'Clique encore pour confirmer (tout sera effacé)',
+ practice:'Pratique dans l\'Atelier',
+ revT:'Révisions',revD:'Les questions que tu as ratées reviennent au bon moment : demain, dans 3 jours, une semaine… jusqu\'à ce qu\'elles soient acquises. C\'est la méthode de la répétition espacée.',
+ revDue:n=>n?`${n} question${n>1?'s':''} à revoir aujourd'hui`:'Rien à revoir aujourd\'hui. Reviens demain ou fais une nouvelle leçon !',revGo:'Lancer la révision',revAll:n=>`${n} question${n>1?'s':''} en mémoire au total`,
+ labT:'Atelier',labD:'Écris du vrai code et lance-le. Des tests vérifient automatiquement si ton programme fonctionne, exactement comme chez les développeurs pros.',
+ all:'Tous',lv:['','Facile','Moyen','Difficile'],sbx:'Bac à sable',sbxD:'Écris et lance le code que tu veux, sans consigne.',back:'← Retour',
+ run:'Exécuter',runK:'Ctrl + Entrée',hint:'Indice (IA)',revCode:'Revue de code (IA)',sol:'Voir la solution',solT:'Une solution possible (compare avec la tienne) :',
+ tests:'Tests',exp:'attendu',got:'obtenu',logs:'Console',loadPy:'Chargement de Python dans ton navigateur (environ 10 Mo, une seule fois)…',loadSql:'Chargement du moteur SQL…',
+ engFail:'Le moteur n\'a pas pu se charger ici. Vérifie ta connexion et réessaie.',timeout:'Ton code a mis trop de temps (boucle infinie ?).',noFn:f=>`La fonction ${f} est introuvable. Vérifie son nom.`,
+ passAll:'Tous les tests passent. Défi réussi !',passXp:x=>` +${x} XP`,fail:(p,t)=>`${p} / ${t} tests réussis. Corrige et réessaie !`,ban:w=>`Interdit d'utiliser ${w} pour ce défi.`,
+ table:'Voir la table games',rows:'Ton résultat',noRows:'Aucune ligne.',sqlOk:'Résultat correct. Défi réussi !',sqlBad:'Le résultat ne correspond pas à ce qui est demandé.',
+ preview:'Aperçu',checks:'Vérifications',engine:'Langage',sbxRun:'Code exécuté.'},
+en:{langs:'Languages',lab:'Workshop',review:'Review',prof:'AI tutor',install:'Install on my PC',
+ lessonsDone:(n,t)=>`${n} of ${t} lesson${t>1?'s':''} completed`,lesson:'Lesson',locked:'Finish the previous lesson',replay:'replay',ex:'exercises',
+ start:'Start',check:'Check',cont:'Continue',finish:'Finish',keys:'Keys 1–4 to choose · Enter to check · Esc to quit',
+ good:'Nice one!',bad:'Not quite.',answer:' Answer: ',explain:'Explain it to me (AI tutor)',exercise:'Exercise',
+ doneT:'Lesson complete!',perfT:'Flawless, well done!',goodOf:(g,t)=>`${g} / ${t} correct`,bonus:' · bonus +20 XP',half:' · replayed: half XP',streak:n=>` · streak: ${n} day${n>1?'s':''}`,
+ titles:['Beginner','Apprentice','Coder','Developer','Expert','Hacker','Architect','Legend'],
+ xpLine:(x,r,n)=>`${x} XP · ${r} XP to level ${n}`,stS:'day streak',stL:'lessons',stC:'challenges',stR:'to review',
+ ach:'Achievements',achHint:'Click a badge to see how to unlock it.',unl:' · unlocked',reset:'Reset my progress',resetC:'Click again to confirm (everything will be erased)',
+ practice:'Practise in the Workshop',
+ revT:'Review',revD:'Questions you missed come back at the right time: tomorrow, in 3 days, in a week… until you\'ve nailed them. This is spaced repetition.',
+ revDue:n=>n?`${n} question${n>1?'s':''} to review today`:'Nothing to review today. Come back tomorrow or take a new lesson!',revGo:'Start review',revAll:n=>`${n} question${n>1?'s':''} in memory overall`,
+ labT:'Workshop',labD:'Write real code and run it. Tests automatically check whether your program works, exactly like professional developers do.',
+ all:'All',lv:['','Easy','Medium','Hard'],sbx:'Sandbox',sbxD:'Write and run any code you like, no instructions.',back:'← Back',
+ run:'Run',runK:'Ctrl + Enter',hint:'Hint (AI)',revCode:'Code review (AI)',sol:'Show solution',solT:'One possible solution (compare it with yours):',
+ tests:'Tests',exp:'expected',got:'got',logs:'Console',loadPy:'Loading Python in your browser (about 10 MB, only once)…',loadSql:'Loading the SQL engine…',
+ engFail:'The engine couldn\'t load here. Check your connection and try again.',timeout:'Your code took too long (infinite loop?).',noFn:f=>`Function ${f} not found. Check its name.`,
+ passAll:'All tests pass. Challenge complete!',passXp:x=>` +${x} XP`,fail:(p,t)=>`${p} / ${t} tests passed. Fix it and try again!`,ban:w=>`You can't use ${w} in this challenge.`,
+ table:'Show the games table',rows:'Your result',noRows:'No rows.',sqlOk:'Correct result. Challenge complete!',sqlBad:'The result doesn\'t match what was asked.',
+ preview:'Preview',checks:'Checks',engine:'Language',sbxRun:'Code ran.'}};
+// ================= SUCCÈS =================
+const I={star:'<path d="M12 2l3 7 7 .6-5.3 4.7 1.6 7.2L12 17.8 5.7 21.5l1.6-7.2L2 9.6 9 9z"/>',fire:'<path d="M12 2c1 4 6 6 6 12a6 6 0 01-12 0c0-3 2-5 3-6 0 2 1 3 2 3 0-4-1-6 1-9z"/>',bolt:'<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>',globe:'<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18" fill="none" stroke="currentColor" stroke-width="2"/>',crown:'<path d="M3 8l4 4 5-7 5 7 4-4-2 11H5z"/>',moon:'<path d="M20 15A8 8 0 019 4a8 8 0 1011 11z"/>',sun:'<circle cx="12" cy="12" r="5"/><path d="M12 1v4M12 19v4M1 12h4M19 12h4M4 4l3 3M17 17l3 3M4 20l3-3M17 7l3-3" stroke="currentColor" stroke-width="2"/>',check:'<path d="M4 12l5 5L20 6" fill="none" stroke="currentColor" stroke-width="3"/>',book:'<path d="M4 4h7v16H4zM13 4h7v16h-7z"/>',db:'<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 2 4 3 8 3s8-1 8-3V5c0 2-4 3-8 3S4 7 4 5z"/>',code:'<path d="M8 6l-6 6 6 6M16 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.5"/>',brain:'<path d="M9 3a3 3 0 00-3 3 3 3 0 00-2 5 3 3 0 002 5 3 3 0 003 3h1V3zM15 3a3 3 0 013 3 3 3 0 012 5 3 3 0 01-2 5 3 3 0 01-3 3h-1V3z"/>',chat:'<path d="M4 4h16v12H8l-4 4z"/>',loop:'<path d="M4 12a8 8 0 0114-5l2-2v6h-6l2-2a5 5 0 10 1 6l2 2A8 8 0 014 12z"/>'};
+const done=(id,i)=>!!S.done[id+'-'+i];
+const langDone=id=>{const c=C()[id];return !!c&&c.ls.every((_,i)=>done(id,i))};
+const nCh=()=>Object.keys(S.ch).length;
+const A=[
+ {id:'first',i:'check',n:{fr:'Hello World',en:'Hello World'},d:{fr:'Termine ta première leçon',en:'Finish your first lesson'},f:s=>s.lessons>=1},
+ {id:'l10',i:'book',n:{fr:'Lancé',en:'On a roll'},d:{fr:'Termine 10 leçons',en:'Finish 10 lessons'},f:s=>s.lessons>=10},
+ {id:'l30',i:'book',n:{fr:'Bûcheur',en:'Hard worker'},d:{fr:'Termine 30 leçons',en:'Finish 30 lessons'},f:s=>s.lessons>=30},
+ {id:'lall',i:'crown',n:{fr:'Encyclopédie',en:'Encyclopedia'},d:{fr:'Termine toutes les leçons',en:'Finish every lesson'},f:s=>M.every(m=>langDone(m.id))},
+ {id:'p1',i:'star',n:{fr:'Sans faute',en:'Flawless'},d:{fr:'Une leçon sans erreur',en:'A lesson with no mistakes'},f:s=>s.perfect>=1},
+ {id:'p10',i:'star',n:{fr:'Précision',en:'Precision'},d:{fr:'10 leçons sans erreur',en:'10 flawless lessons'},f:s=>s.perfect>=10},
+ {id:'t3',i:'globe',n:{fr:'Curieux',en:'Curious'},d:{fr:'Essaie 3 langages',en:'Try 3 languages'},f:s=>Object.keys(s.tried).length>=3},
+ {id:'t10',i:'globe',n:{fr:'Polyglotte',en:'Polyglot'},d:{fr:'Essaie 10 langages',en:'Try 10 languages'},f:s=>Object.keys(s.tried).length>=10},
+ {id:'web',i:'bolt',n:{fr:'Trio du web',en:'Web trio'},d:{fr:'Une leçon en HTML, CSS et JavaScript',en:'A lesson in HTML, CSS and JavaScript'},f:s=>['html','css','js'].every(k=>s.tried[k])},
+ {id:'algo',i:'brain',n:{fr:'Algorithmicien',en:'Algorithmist'},d:{fr:'Termine l\'Algorithmique',en:'Finish Algorithms'},f:s=>langDone('algo')},
+ {id:'full1',i:'crown',n:{fr:'Diplômé',en:'Graduate'},d:{fr:'Termine un langage entier',en:'Finish a whole language'},f:s=>M.some(m=>langDone(m.id))},
+ {id:'full5',i:'crown',n:{fr:'Quintuple diplôme',en:'Five diplomas'},d:{fr:'Termine 5 langages',en:'Finish 5 languages'},f:s=>M.filter(m=>langDone(m.id)).length>=5},
+ {id:'c1',i:'code',n:{fr:'Premier programme',en:'First program'},d:{fr:'Réussis un défi de l\'Atelier',en:'Pass a Workshop challenge'},f:s=>nCh()>=1},
+ {id:'c10',i:'code',n:{fr:'Codeur confirmé',en:'Proven coder'},d:{fr:'Réussis 10 défis',en:'Pass 10 challenges'},f:s=>nCh()>=10},
+ {id:'call',i:'crown',n:{fr:'Maître de l\'Atelier',en:'Workshop master'},d:{fr:'Réussis tous les défis',en:'Pass every challenge'},f:s=>nCh()>=CH.length},
+ {id:'eng4',i:'bolt',n:{fr:'Touche-à-tout',en:'All-rounder'},d:{fr:'Un défi en JS, Python, SQL et HTML/CSS',en:'A challenge in JS, Python, SQL and HTML/CSS'},f:s=>['js','py','sql','web'].every(k=>s.eng[k])},
+ {id:'hard',i:'brain',n:{fr:'Casse-tête',en:'Puzzle solver'},d:{fr:'Réussis un défi difficile',en:'Pass a hard challenge'},f:s=>CH.some(c=>c.lv===3&&s.ch[c.id])},
+ {id:'rev10',i:'loop',n:{fr:'Mémoire d\'éléphant',en:'Elephant memory'},d:{fr:'10 bonnes réponses en révision',en:'10 correct answers in review'},f:s=>s.revOk>=10},
+ {id:'s3',i:'fire',n:{fr:'En feu',en:'On fire'},d:{fr:'Série de 3 jours',en:'3-day streak'},f:s=>s.streak>=3},
+ {id:'s7',i:'fire',n:{fr:'Inarrêtable',en:'Unstoppable'},d:{fr:'Série de 7 jours',en:'7-day streak'},f:s=>s.streak>=7},
+ {id:'s30',i:'fire',n:{fr:'Discipline de fer',en:'Iron discipline'},d:{fr:'Série de 30 jours',en:'30-day streak'},f:s=>s.streak>=30},
+ {id:'x1000',i:'bolt',n:{fr:'1000 XP',en:'1000 XP'},d:{fr:'Cumule 1000 XP',en:'Earn 1000 XP'},f:s=>s.xp>=1000},
+ {id:'lv10',i:'star',n:{fr:'Niveau 10',en:'Level 10'},d:{fr:'Atteins le niveau 10',en:'Reach level 10'},f:s=>lvl(s.xp)>=10},
+ {id:'night',i:'moon',n:{fr:'Codeur de nuit',en:'Night coder'},d:{fr:'Finis une session après 23h',en:'Finish a session after 11pm'},f:s=>s.night}];
+// ================= ÉTAT =================
+let installOk=false;
+const KEY='codequest-v1';
+const fresh=()=>({xp:0,done:{},lessons:0,perfect:0,tried:{},streak:0,last:'',ach:{},night:false,early:false,cur:'py',ui:'fr',view:'path',ch:{},drafts:{},rev:{},revOk:0,asked:0,eng:{},aiProv:'webllm',aiModel:'Qwen2.5-Coder-7B-Instruct-q4f16_1-MLC',olUrl:'http://localhost:11434',olModel:'qwen2.5-coder:7b'});
+let S=fresh();
+const fixView=()=>{if(!['path','lab','review'].includes(S.view))S.view='path'};
+try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(fresh(),JSON.parse(r))}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const C=()=>CQ[S.ui]||CQ.fr;
+const t=()=>T[S.ui]||T.fr;
+const L=o=>o&&typeof o==='object'?(o[S.ui]??o.fr):o;
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const lvl=xp=>Math.floor(Math.sqrt(xp/40))+1;
+const lvlMin=n=>40*(n-1)**2;
+const day=(o=0)=>new Date(Date.now()+o*864e5).toLocaleDateString('sv');
+const $=id=>document.getElementById(id);
+const icon=k=>'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'+I[k]+'</svg>';
+const dueKeys=()=>Object.keys(S.rev).filter(k=>S.rev[k].due<=day()&&getQ(k));
+function getQ(k){const [id,li,qi]=k.split('|');return C()[id]?.ls[+li]?.q[+qi]}
+function setColor(c,tx){document.documentElement.style.setProperty('--lc',c);document.documentElement.style.setProperty('--lt',tx)}
+// md : texte de Claude → HTML échappé (code entre ```)
+function md(s){return String(s).split('```').map((p,i)=>{if(i%2){const nl=p.indexOf('\n');const body=nl>-1&&/^[\w+#-]*$/.test(p.slice(0,nl).trim())?p.slice(nl+1):p;return '<pre><code>'+esc(body.replace(/\n$/,''))+'</code></pre>'}
+ return esc(p).replace(/`([^`\n]+)`/g,'<code>$1</code>').replace(/\*\*([^*\n]+)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>')}).join('')}
+// ================= IA =================
+// ================= RENDU : NAVIGATION =================
+function renderSide(){
+ const tt=t(),due=dueKeys().length;
+ const nav=(v,ic,label,extra='')=>`<button class="nav" data-v="${v}" aria-current="${S.view===v}">${icon(ic)}<span>${label}</span>${extra}</button>`;
+ $('side').innerHTML=`<div class="logo"><i>&lt;/&gt;</i>CodeQuest</div>
+ <div class="seg" role="group" aria-label="Langue / Language"><button data-ui="fr" aria-pressed="${S.ui==='fr'}">Français</button><button data-ui="en" aria-pressed="${S.ui==='en'}">English</button></div>
+ ${nav('lab','code',tt.lab)}${nav('review','loop',tt.review,due?`<i class="pill" style="font-style:normal">${due}</i>`:'')}
+ <small>${tt.langs}</small>
+ ${M.map(m=>{const c=C()[m.id];const n=c.ls.filter((_,i)=>done(m.id,i)).length,full=n===c.ls.length;
+  return `<button class="lang" data-l="${m.id}" aria-current="${S.view==='path'&&S.cur===m.id}"><i class="dot" style="background:${m.c};color:${m.t}">${esc(m.ab)}</i><span>${esc(L(m.n))}</span><b class="${full?'full':''}">${full?'★':n+'/'+c.ls.length}</b></button>`}).join('')}
+ <button id="install" hidden>${tt.install}</button>`;
+ if(installOk)$('install').hidden=false;
+}
+function renderMain(){
+ document.documentElement.lang=S.ui;
+ ({path:renderPath,lab:renderLab,review:renderReview}[S.view]||renderPath)();
+}
+function renderPath(){
+ const tt=t(),m=M.find(x=>x.id===S.cur)||M[0],c=C()[m.id];setColor(m.c,m.t);
+ const n=c.ls.filter((_,i)=>done(m.id,i)).length,firstOpen=c.ls.findIndex((_,i)=>!done(m.id,i));
+ const hasLab=CH.some(x=>x.k===m.id||(x.k==='web'&&(m.id==='html'||m.id==='css')));
+ $('main').innerHTML=`<section class="hero"><h1>${esc(L(m.n))}</h1><p>${esc(c.d)}</p><div class="meter"><i style="width:${n/c.ls.length*100}%"></i></div><div class="mt">${tt.lessonsDone(n,c.ls.length)}</div>
+ <div class="hrow">${hasLab?`<button class="hbtn solid" id="toLab">${tt.practice}</button>`:''}</div></section>
+ <section class="path">${c.ls.map((ls,i)=>{const d=S.done[m.id+'-'+i];const st=d?'done':(i===firstOpen?'open':'lock');
+  const stars=d?'★'.repeat(d.best)+'☆'.repeat(3-d.best):'';
+  return `<div class="node ${st}"><button class="bub" data-i="${i}" ${st==='lock'?'aria-disabled="true"':''} aria-label="${tt.lesson} ${i+1} : ${esc(ls.n)}">${d?'✓':st==='lock'?'🔒︎':i+1}</button><div><h3>${esc(ls.n)}</h3><p>${st==='lock'?tt.locked:d?'<span class="stars">'+stars+'</span> · '+tt.replay:ls.q.length+' '+tt.ex+' · +'+(ls.q.length*10)+' XP'}</p></div></div>`}).join('')}</section>`;
+}
+function renderReview(){
+ const tt=t(),due=dueKeys().length;setColor('#ffc531','#2b2000');
+ $('main').innerHTML=`<section class="hero"><h1>${tt.revT}</h1><p>${tt.revD}</p><div class="mt" style="font-size:17px;font-weight:600">${tt.revDue(due)}</div>
+ <div class="hrow">${due?`<button class="hbtn solid" id="revGo">${tt.revGo}</button>`:''}</div></section>
+ <div class="wrap"><p class="note">${tt.revAll(Object.keys(S.rev).length)}</p></div>`;
+}
+let labSel=null,labF='all',fails={};
+function renderLab(){
+ const tt=t();setColor('#ff5a36','#fff');
+ if(labSel){renderEditor();return}
+ const list=CH.filter(c=>labF==='all'||c.k===labF);
+ $('main').innerHTML=`<section class="hero"><h1>${tt.labT}</h1><p>${tt.labD}</p><div class="meter"><i style="width:${nCh()/CH.length*100}%"></i></div><div class="mt">${nCh()} / ${CH.length}</div></section>
+ <div class="wrap"><div class="tabs" role="group">${['all','js','py','sql','web'].map(k=>`<button class="tab" data-f="${k}" aria-pressed="${labF===k}">${k==='all'?tt.all:ENG[k].n}</button>`).join('')}</div>
+ <div class="grid"><button class="cc sbx" data-c="sandbox"><h3>${tt.sbx}</h3><span style="font-size:14px;color:#c9ccd5">${tt.sbxD}</span><div class="meta"><span>JS · Python · HTML</span></div></button>
+ ${list.map(c=>`<button class="cc ${S.ch[c.id]?'ok':''}" data-c="${c.id}"><span class="eng" style="background:${ENG[c.k].c};color:${ENG[c.k].t}">${ENG[c.k].n}</span><h3>${esc(L(c.t))}</h3><div class="meta"><span><span class="lvd">${'●'.repeat(c.lv)}${'○'.repeat(3-c.lv)}</span> ${tt.lv[c.lv]}</span><span>+${CHXP[c.lv]} XP</span></div></button>`).join('')}</div></div>`;
+}
+let sbxEng='js';
+function renderEditor(){
+ const tt=t(),sb=labSel==='sandbox',c=sb?null:CH.find(x=>x.id===labSel);
+ const dk=sb?'sbx-'+sbxEng:c.id;
+ const code=S.drafts[dk]??(sb?{js:`console.log("${S.ui==='fr'?'Salut !':'Hello!'}");\n`,py:`print("${S.ui==='fr'?'Salut !':'Hello!'}")\n`,web:`<h1>${S.ui==='fr'?'Salut !':'Hello!'}</h1>\n`}[sbxEng]:L(c.s));
+ const k=sb?sbxEng:c.k;
+ $('main').innerHTML=`<div class="wrap"><div class="lh"><button class="back" id="labBack">${tt.back}</button>
+ ${sb?`<h2>${tt.sbx}</h2><div class="tabs" style="margin:0">${['js','py','web'].map(e=>`<button class="tab" data-sb="${e}" aria-pressed="${sbxEng===e}">${ENG[e].n}</button>`).join('')}</div>`
+ :`<span class="eng" style="background:${ENG[c.k].c};color:${ENG[c.k].t}">${ENG[c.k].n}</span><h2>${esc(L(c.t))}</h2><span class="note"><span class="lvd">${'●'.repeat(c.lv)}${'○'.repeat(3-c.lv)}</span> ${tt.lv[c.lv]} · +${CHXP[c.lv]} XP${S.ch[c.id]?' · ✓':''}</span>`}</div>
+ ${sb?`<p class="desc">${tt.sbxD}</p>`:`<p class="desc">${esc(L(c.d))}</p>`}
+ ${k==='sql'?`<details style="margin-bottom:12px"><summary style="cursor:pointer;font-weight:600;min-height:32px">${tt.table}</summary><div class="scroll" id="sqlTable"></div></details>`:''}
+ <textarea class="code" id="code" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Code">${esc(code)}</textarea>
+ <div class="tools"><button class="btn pri" id="run">${tt.run} <span style="opacity:.75;font-weight:500">· ${tt.runK}</span></button>
+ ${!sb&&(fails[c.id]>=2||S.ch[c.id])?`<button class="btn" id="showSol">${tt.sol}</button>`:''}</div>
+ <div class="out" id="out"></div><div class="aibox" id="ai"></div></div>`;
+ if(k==='sql')loadSql().then(a=>{const db=new a.Database();db.exec(CQ.sqlSetup);$('sqlTable')&&($('sqlTable').innerHTML=resTable(db.exec('SELECT * FROM games')))}).catch(()=>{});
+}
+let achSel=null;
+function renderProfile(){
+ const tt=t(),lv=lvl(S.xp),a=lvlMin(lv),b=lvlMin(lv+1),p=Math.round((S.xp-a)/(b-a)*100);
+ $('prof').innerHTML=`<div class="lvl"><div class="ring" style="--p:${p}%"><div>${lv}</div></div><div><h2>${tt.titles[Math.min(7,Math.floor((lv-1)/2))]}</h2><p>${tt.xpLine(S.xp,b-S.xp,lv+1)}</p></div></div>
+ <div class="stats"><div class="stat"><b>${S.streak}</b><span>${tt.stS}</span></div><div class="stat"><b>${S.lessons}</b><span>${tt.stL}</span></div><div class="stat"><b>${nCh()}</b><span>${tt.stC}</span></div><div class="stat"><b>${dueKeys().length}</b><span>${tt.stR}</span></div></div>
+ <h3>${tt.ach} <span>${Object.keys(S.ach).length} / ${A.length}</span></h3>
+ <div class="achs">${A.map(x=>`<button class="ach ${S.ach[x.id]?'on':''}" data-a="${x.id}" aria-label="${esc(L(x.n))}">${icon(x.i)}</button>`).join('')}</div>
+ <div class="achinfo" id="achinfo">${achText(achSel)}</div>
+ <button class="reset" id="reset">${tt.reset}</button>`;
+}
+function achText(id){const x=A.find(a=>a.id===id);if(!x)return '<span class="hint">'+t().achHint+'</span>';return `<b>${esc(L(x.n))}${S.ach[x.id]?t().unl:''}</b>${esc(L(x.d))}`}
+const render=()=>{renderSide();renderMain();renderProfile()};
+// ================= LEÇONS / RÉVISIONS / ENTRAÎNEMENT =================
+let R=null;
+function openRun(o){R=Object.assign({step:o.theory?-1:0,err:0,xp:0,sel:null,checked:false},o);$('lesson').classList.add('on');$('lfoot').className='lfoot';$('fb').innerHTML='';$('lbar').style.width='0%';if(!o.loading)showStep()}
+function startLesson(i){const m=M.find(x=>x.id===S.cur),ls=C()[m.id].ls[i];
+ openRun({mode:'lesson',li:i,lang:m.id,title:L(m.n)+' · '+t().lesson+' '+(i+1),theory:ls,qs:ls.q.map((q,j)=>({q,key:m.id+'|'+i+'|'+j}))})}
+function startReview(){const ks=dueKeys().sort(()=>Math.random()-.5).slice(0,10);if(!ks.length)return;
+ openRun({mode:'review',title:t().revT,qs:ks.map(k=>({q:getQ(k),key:k}))})}
+function showStep(){
+ const tt=t(),{qs,step}=R,tot=qs.length;R.sel=null;R.checked=false;
+ $('lbar').style.width=((step+1+(R.theory?1:0))/(tot+(R.theory?1:0))*100)+'%';$('lxp').textContent='+'+R.xp+' XP';
+ $('lfoot').className='lfoot';$('fb').innerHTML='<span class="hint">'+tt.keys+'</span>';
+ const go=$('go');
+ if(step===-1){const th=R.theory;
+  $('lbody').innerHTML=`<span class="tag">${esc(R.title)}</span><h2>${esc(th.n)}</h2><p class="theory">${esc(th.th)}</p><pre><button class="cp" data-cp>${S.ui==='fr'?'Copier':'Copy'}</button><code>${esc(th.ex)}</code></pre>`;
+  go.textContent=tt.start;go.disabled=false;go.focus();return}
+ const q=qs[step].q;
+ let h=`<span class="tag">${esc(R.title)} · ${tt.exercise} ${step+1} / ${tot}</span><h2>${esc(q.p)}</h2>`;
+ if(q.t==='f')h+=`<pre><code>${esc(q.c)}</code></pre><input class="fill" id="fill" autocomplete="off" spellcheck="false" autocapitalize="off" aria-label="${esc(q.p)}">`;
+ else{if(q.c)h+=`<pre><code>${esc(q.c)}</code></pre>`;h+=`<div class="opts">${q.o.map((o,j)=>`<button class="opt" data-o="${j}"><kbd>${j+1}</kbd><code>${esc(o)}</code></button>`).join('')}</div>`}
+ $('lbody').innerHTML=h;$('lbody').scrollTop=0;go.textContent=tt.check;go.disabled=true;
+ const f=$('fill');if(f){f.focus();f.addEventListener('input',()=>{go.disabled=!f.value.trim()})}
+}
+function pick(j){if(!R||R.checked||R.step<0||R.step==='end'||!R.qs[R.step])return;R.sel=j;document.querySelectorAll('.opt').forEach(b=>b.classList.toggle('sel',+b.dataset.o===j));$('go').disabled=false}
+const norm=s=>String(s).trim().toLowerCase().replace(/\s+/g,'');
+function check(){
+ const tt=t(),{q,key}=R.qs[R.step];let ok,given;
+ if(q.t==='f'){const f=$('fill');given=f.value;ok=q.a.some(a=>norm(a)===norm(f.value));f.classList.add(ok?'good':'wrong');f.disabled=true}
+ else{given=q.o[R.sel];ok=R.sel===q.a;document.querySelectorAll('.opt').forEach(b=>{const j=+b.dataset.o;if(j===q.a)b.classList.add('good');else if(j===R.sel)b.classList.add('wrong')})}
+ if(ok){R.xp+=R.mode==='lesson'?10:5}else R.err++;
+ if(key&&R.mode!=='endless'){
+  if(ok&&R.mode==='review'){const r=S.rev[key];const b=(r?r.b:0)+1;S.revOk++;if(b>=5)delete S.rev[key];else S.rev[key]={b,due:day([1,3,7,14,30][b])}}
+  if(!ok)S.rev[key]={b:0,due:day(1)};
+ }
+ R.checked=true;$('lxp').textContent='+'+R.xp+' XP';
+ $('lfoot').className='lfoot '+(ok?'good':'wrong');
+ const right=q.t==='f'?q.a[0]:q.o[q.a];
+ $('fb').innerHTML=`<b>${ok?tt.good:tt.bad}</b>${esc(q.e)}${ok?'':esc(tt.answer+right)}`;
+ R.lastWrong={q,given,right};
+ $('go').textContent=R.step===R.qs.length-1?tt.finish:tt.cont;$('go').disabled=false;$('go').focus();
+}
+function bumpDay(){const td=day();if(S.last!==td){S.streak=S.last===day(-1)?S.streak+1:1;S.last=td}const h=new Date().getHours();if(h>=23)S.night=true;if(h<8)S.early=true}
+function award(){const news=A.filter(a=>!S.ach[a.id]&&a.f(S));news.forEach(a=>S.ach[a.id]=Date.now());news.forEach((a,j)=>setTimeout(()=>toast(a),500+j*2600));return news}
+function finish(){
+ const tt=t(),tot=R.qs.length,good=tot-R.err,perfect=R.err===0;let gain=R.xp,extra='';
+ if(R.mode==='lesson'){const k=R.lang+'-'+R.li,first=!S.done[k],best=good===tot?3:good>=tot-1?2:1;
+  gain+=perfect?20:0;if(!first)gain=Math.round(gain/2);
+  if(first){S.lessons++;S.done[k]={best}}else S.done[k].best=Math.max(S.done[k].best,best);
+  if(perfect)S.perfect++;S.tried[R.lang]=1;extra=(perfect?tt.bonus:'')+(first?'':tt.half)}
+ S.xp+=gain;bumpDay();const news=award();save();
+ $('lbar').style.width='100%';$('lfoot').className='lfoot';
+ $('lbody').innerHTML=`<div class="end"><div class="big">+${gain} XP</div><h2 style="margin-top:14px">${perfect?tt.perfT:tt.doneT}</h2><p class="hint" style="font-size:16px">${tt.goodOf(good,tot)}${extra}${tt.streak(S.streak)}</p>${news.length?'<div class="newa">'+news.map(a=>'<div>★ '+esc(L(a.n))+'</div>').join('')+'</div>':''}</div>`;
+ $('fb').innerHTML='';$('go').textContent=tt.cont;R.step='end';$('go').focus();
+}
+function next(){
+ if(!R||R.loading)return;
+ if(R.step==='end'){closeRun();return}
+ if(R.step>=0&&!R.checked){check();return}
+ if(R.step===R.qs.length-1){finish();return}
+ R.step++;showStep();
+}
+function closeRun(){$('lesson').classList.remove('on');R=null;save();render()}
+let tT;function toast(a){$('tt').textContent=(S.ui==='fr'?'Succès débloqué : ':'Achievement unlocked: ')+L(a.n);$('td').textContent=L(a.d);$('toast').classList.add('on');clearTimeout(tT);tT=setTimeout(()=>$('toast').classList.remove('on'),2400)}
+// ================= MOTEURS D'EXÉCUTION =================
+const loaded={};
+function loadScript(src){return loaded[src]||(loaded[src]=new Promise((ok,ko)=>{const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=()=>{delete loaded[src];ko(new Error('load'))};document.head.appendChild(s)}))}
+let pyP=null;
+function loadPy(){return pyP||(pyP=loadScript('https://cdn.jsdelivr.net/pyodide/v0.27.7/full/pyodide.js').then(()=>window.loadPyodide({indexURL:'https://cdn.jsdelivr.net/pyodide/v0.27.7/full/'})).catch(e=>{pyP=null;throw e}))}
+function loadSql(){return loadScript('https://cdn.jsdelivr.net/npm/alasql@4.6.6/dist/alasql.min.js').then(()=>window.alasql)}
+const WORKER=`onmessage=e=>{const d=e.data,logs=[];const f=a=>a.map(x=>typeof x==='string'?x:(()=>{try{return JSON.stringify(x)}catch(_){return String(x)}})()).join(' ');
+console.log=(...a)=>logs.push(f(a));console.error=console.warn=console.info=console.log;
+try{const fn=new Function(d.code+'\\n;return '+(d.fn?'typeof '+d.fn+'==="function"?'+d.fn+':undefined':'undefined'))();
+if(d.fn&&!fn){postMessage({nofn:true,logs});return}
+const res=(d.cases||[]).map(c=>{try{const v=fn(...JSON.parse(JSON.stringify(c[0])));return {v:v===undefined?'undefined':JSON.stringify(v)}}catch(err){return {err:String(err)}}});
+postMessage({res,logs})}catch(err){postMessage({error:String(err),logs})}}`;
+let wURL=null;
+function runJS(code,fn,cases){return new Promise(ok=>{
+ wURL=wURL||URL.createObjectURL(new Blob([WORKER],{type:'text/javascript'}));
+ let w;try{w=new Worker(wURL)}catch(e){ok({error:t().engFail,logs:[]});return}
+ const to=setTimeout(()=>{w.terminate();ok({error:t().timeout,logs:[]})},4000);
+ w.onmessage=e=>{clearTimeout(to);w.terminate();ok(e.data)};
+ w.onerror=e=>{clearTimeout(to);w.terminate();ok({error:e.message||'Error',logs:[]});e.preventDefault()};
+ w.postMessage({code,fn,cases});
+})}
+async function runPy(code,fn,cases){
+ const py=await loadPy();const logs=[];
+ py.setStdout({batched:s=>logs.push(s)});py.setStderr({batched:s=>logs.push(s)});
+ const ns=py.globals.get('dict')();
+ try{await py.runPythonAsync(code,{globals:ns});
+  if(!fn)return {logs};
+  ns.set('__CASES',JSON.stringify(cases));ns.set('__FN',fn);
+  const out=await py.runPythonAsync(`import json
+__out=None
+if __FN in globals() and callable(globals()[__FN]):
+    __f=globals()[__FN]
+    __out=[]
+    for __a,__e in json.loads(__CASES):
+        try:
+            __r=__f(*__a)
+            __ok=(__r==__e) and (type(__r)==bool)==(type(__e)==bool)
+            __out.append({"ok":bool(__ok),"v":repr(__r)})
+        except Exception as __x:
+            __out.append({"ok":False,"err":type(__x).__name__+": "+str(__x)})
+json.dumps(__out)`,{globals:ns});
+  const res=JSON.parse(out);if(res===null)return {nofn:true,logs};return {res,logs};
+ }catch(e){return {error:String(e.message||e).split('\n').filter(Boolean).slice(-3).join('\n'),logs}}
+ finally{ns.destroy&&ns.destroy()}
+}
+const nz=v=>v&&typeof v==='object'?(Array.isArray(v)?v.map(nz):Object.keys(v).sort().reduce((o,k)=>(o[k]=nz(v[k]),o),{})):v;
+const pyLit=v=>JSON.stringify(v).replace(/\btrue\b/g,'True').replace(/\bfalse\b/g,'False').replace(/\bnull\b/g,'None');
+function resTable(rows){if(!Array.isArray(rows)||!rows.length)return '<p class="note">'+t().noRows+'</p>';const cols=Object.keys(rows[0]);
+ return `<table class="res"><thead><tr>${cols.map(c=>`<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>${rows.slice(0,30).map(r=>`<tr>${cols.map(c=>`<td class="${typeof r[c]==='number'?'n':''}">${esc(typeof r[c]==='number'?Math.round(r[c]*100)/100:r[c])}</td>`).join('')}</tr>`).join('')}</tbody></table>`}
+const rowKey=rows=>(rows||[]).map(r=>JSON.stringify(Object.values(r).map(v=>typeof v==='number'?Math.round(v*100)/100:v)));
+async function runLab(){
+ const tt=t(),sb=labSel==='sandbox',c=sb?null:CH.find(x=>x.id===labSel),k=sb?sbxEng:c.k;
+ const code=$('code').value,out=$('out'),btn=$('run');
+ S.drafts[sb?'sbx-'+sbxEng:c.id]=code;save();
+ btn.disabled=true;$('ai').innerHTML='';
+ let pass=false,html='';
+ try{
+ if(c&&c.ban&&code.includes(c.ban)){html=`<div class="banner n">${esc(tt.ban(c.ban))}</div>`}
+ else if(k==='js'||k==='py'){
+  if(k==='py'&&!pyP)out.innerHTML=`<p class="note">${tt.loadPy}</p>`;
+  const r=k==='js'?await runJS(code,c?.fn,c?.cases):await runPy(code,c?.fn,c?.cases);
+  if(r.error)html+=`<div class="banner n"><code style="white-space:pre-wrap">${esc(r.error)}</code></div>`;
+  else if(r.nofn)html+=`<div class="banner n">${esc(tt.noFn(c.fn))}</div>`;
+  else if(c){const res=r.res.map((x,i)=>{const [args,e]=c.cases[i];let ok,got;
+    if(k==='js'){got=x.err?x.err:x.v;ok=!x.err&&x.v!=='undefined'&&JSON.stringify(nz(JSON.parse(x.v)))===JSON.stringify(nz(e))}else{got=x.err||x.v;ok=x.ok}
+    return {ok,call:`${c.fn}(${args.map(a=>k==='py'?pyLit(a):JSON.stringify(a)).join(', ')})`,e:k==='py'?pyLit(e):JSON.stringify(e),got}});
+   const np=res.filter(x=>x.ok).length;pass=np===res.length;
+   html+=`<div class="banner ${pass?'y':'n'}">${pass?tt.passAll+(S.ch[c.id]?'':tt.passXp(CHXP[c.lv])):tt.fail(np,res.length)}</div><h4>${tt.tests}</h4>`+res.map(x=>`<div class="trow"><i class="${x.ok?'y':'n'}">${x.ok?'✓':'✗'}</i><div><code>${esc(x.call)}</code><br><span class="note">${tt.exp} <code>${esc(x.e)}</code> · ${tt.got} <code>${esc(x.got)}</code></span></div></div>`).join('')}
+  else if(!r.error)html+=`<div class="banner y">${tt.sbxRun}</div>`;
+  if(r.logs&&r.logs.length)html+=`<h4 style="margin-top:12px">${tt.logs}</h4><pre class="logs">${esc(r.logs.join('\n'))}</pre>`;
+ }
+ else if(k==='sql'){
+  out.innerHTML=`<p class="note">${tt.loadSql}</p>`;
+  const a=await loadSql();
+  const run=q=>{const db=new a.Database();db.exec(CQ.sqlSetup);let r=db.exec(q);if(Array.isArray(r)&&r.length&&Array.isArray(r[r.length-1]))r=r[r.length-1];return r};
+  let got,err=null;try{got=run(code)}catch(e){err=String(e.message||e)}
+  if(err)html=`<div class="banner n"><code style="white-space:pre-wrap">${esc(err)}</code></div>`;
+  else{const exp=run(c.sol);let A1=rowKey(got),B1=rowKey(exp);if(!c.ord){A1=[...A1].sort();B1=[...B1].sort()}
+   pass=Array.isArray(got)&&JSON.stringify(A1)===JSON.stringify(B1);
+   html=`<div class="banner ${pass?'y':'n'}">${pass?tt.sqlOk+(S.ch[c.id]?'':tt.passXp(CHXP[c.lv])):tt.sqlBad}</div><h4>${tt.rows}</h4><div class="scroll">${resTable(Array.isArray(got)?got:[])}</div>`}
+ }
+ else if(k==='web'){
+  out.innerHTML=`<h4>${tt.preview}</h4><div class="pv" id="pvHost"></div><div id="pvChecks"></div>`;
+  const root=$('pvHost').attachShadow({mode:'open'});root.innerHTML=code;
+  if(c){const res=c.checks.map(ch=>{let ok=false;try{ok=!!ch.f(root)}catch(e){}return {ok,m:L(ch.m)}});pass=res.every(x=>x.ok);
+   $('pvChecks').innerHTML=`<div class="banner ${pass?'y':'n'}" style="margin-top:10px">${pass?tt.passAll+(S.ch[c.id]?'':tt.passXp(CHXP[c.lv])):tt.fail(res.filter(x=>x.ok).length,res.length)}</div><h4>${tt.checks}</h4>`+res.map(x=>`<div class="trow"><i class="${x.ok?'y':'n'}">${x.ok?'✓':'✗'}</i><div>${esc(x.m)}</div></div>`).join('')}
+  btn.disabled=false;if(c)afterRun(c,pass,'');return;
+ }
+ }catch(e){html=`<div class="banner n">${esc(tt.engFail)}</div>`}
+ out.innerHTML=html;btn.disabled=false;
+ if(c)afterRun(c,pass,html);
+}
+let lastOut='';
+function afterRun(c,pass,html){
+ lastOut=($('out').textContent||'').slice(0,1500);
+ if(pass&&!S.ch[c.id]){S.ch[c.id]=1;S.eng[c.k]=1;S.xp+=CHXP[c.lv];bumpDay();award();save();renderSide();renderProfile()}
+ if(!pass){fails[c.id]=(fails[c.id]||0)+1;if(fails[c.id]===2&&!$('showSol')){const b=document.createElement('button');b.className='btn';b.id='showSol';b.textContent=t().sol;document.querySelector('.tools').appendChild(b)}}
+}
+// ================= ÉVÉNEMENTS =================
+$('side').addEventListener('click',e=>{
+ const u=e.target.closest('[data-ui]');if(u){S.ui=u.dataset.ui;save();render();return}
+ const v=e.target.closest('[data-v]');if(v){S.view=v.dataset.v;if(S.view==='lab')labSel=null;save();render();scrollTo({top:0});return}
+ const l=e.target.closest('[data-l]');if(l){S.view='path';S.cur=l.dataset.l;save();render();scrollTo({top:0})}});
+$('main').addEventListener('click',e=>{
+ const tg=e.target;
+ const b=tg.closest('.bub');if(b&&!b.closest('.lock')){startLesson(+b.dataset.i);return}
+ if(tg.closest('#toLab')){S.view='lab';labSel=null;labF=['html','css'].includes(S.cur)?'web':['js','py','sql'].includes(S.cur)?S.cur:'all';save();render();return}
+ if(tg.closest('#revGo')){startReview();return}
+ const f=tg.closest('[data-f]');if(f){labF=f.dataset.f;renderLab();return}
+ const cc=tg.closest('[data-c]');if(cc){labSel=cc.dataset.c;renderLab();scrollTo({top:0});return}
+ const sbB=tg.closest('[data-sb]');if(sbB){S.drafts['sbx-'+sbxEng]=$('code').value;sbxEng=sbB.dataset.sb;renderEditor();return}
+ if(tg.closest('#labBack')){if($('code')){S.drafts[labSel==='sandbox'?'sbx-'+sbxEng:labSel]=$('code').value;save()}labSel=null;renderLab();return}
+ if(tg.closest('#run')){runLab();return}
+ const c=CH.find(x=>x.id===labSel);
+ if(tg.closest('#showSol')&&c){$('ai').innerHTML=`<b>${esc(t().solT)}</b><pre><code>${esc(c.sol)}</code></pre>`;return}
+});
+$('main').addEventListener('keydown',e=>{
+ if(e.target.id==='code'){
+  if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();runLab();return}
+  if(e.key==='Tab'&&!e.shiftKey){e.preventDefault();const ta=e.target,s=ta.selectionStart;const isPy=labSel==='sandbox'?sbxEng==='py':CH.find(x=>x.id===labSel)?.k==='py';ta.setRangeText(isPy?'    ':'  ',s,ta.selectionEnd,'end')}}
+ if(e.target.id==='askI'&&e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('askF').requestSubmit()}
+});
+$('prof').addEventListener('click',e=>{const a=e.target.closest('[data-a]');if(a){achSel=a.dataset.a;$('achinfo').innerHTML=achText(achSel);return}
+ if(e.target.id==='reset'){const b=e.target;if(b.dataset.c){const ui=S.ui;S=fresh();S.ui=ui;save();render()}else{b.dataset.c=1;b.textContent=t().resetC}}});
+$('lbody').addEventListener('click',e=>{const o=e.target.closest('.opt');if(o)pick(+o.dataset.o);
+ const c=e.target.closest('[data-cp]');if(c&&R&&R.theory){navigator.clipboard?.writeText(R.theory.ex).then(()=>{c.textContent='✓'},()=>{})}});
+$('go').addEventListener('click',next);
+$('quit').addEventListener('click',closeRun);
+document.addEventListener('keydown',e=>{if(!R)return;
+ if(e.key==='Escape'){closeRun();return}
+ if(e.key==='Enter'&&!e.target.closest('#go,.cp,#quit')){if(!$('go').disabled){e.preventDefault();next()}return}
+ if(/^[1-4]$/.test(e.key)&&document.activeElement.id!=='fill')pick(+e.key-1)});
+// migration v1 → v2 : clés de révision inchangées, rien à faire
+fixView();render();
+// ================= APPLI INSTALLABLE (PWA) =================
+let installEvt=null;
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;installOk=true;const b=$('install');if(b)b.hidden=false});
+document.addEventListener('click',e=>{if(e.target.id==='install'&&installEvt){installEvt.prompt();installEvt.userChoice.finally(()=>{installEvt=null;installOk=false;renderSide()})}});
+if('serviceWorker' in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>
