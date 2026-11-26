@@ -2,6 +2,8 @@
 
 Une appli gratuite pour apprendre à coder, en français et en anglais.
 
+**⬇ Télécharger pour Windows : [CodeQuest.exe](https://github.com/uknw-4/codeQuest/raw/main/telecharger/CodeQuest.exe)** (3 Mo, aucune installation)
+
 - **18 parcours** : Python, JavaScript, HTML, CSS, SQL, Algorithmique, TypeScript, Java, C, C++, C#, PHP, Go, Rust, Ruby, Swift, Kotlin, Bash (192 exercices)
 - **Atelier** : 27 défis où l'on écrit du vrai code (JavaScript, Python, SQL, HTML/CSS), vérifié automatiquement par des tests, plus un bac à sable
 - **Révisions espacées** : les questions ratées reviennent au bon moment
